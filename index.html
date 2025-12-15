@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моё био - killedofficialbd-sys</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .bio-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .bio-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .profile-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .age {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .about {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .about h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        
+        .about p {
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .contact-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+        
+        .contact-card i {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .contact-card h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .contact-card a {
+            color: #666;
+            text-decoration: none;
+            word-break: break-all;
+            display: block;
+            transition: color 0.3s;
+        }
+        
+        .contact-card a:hover {
+            color: #667eea;
+        }
+        
+        .sports {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .sports h3 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sports h3 i {
+            font-size: 24px;
+        }
+        
+        .sports-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .sport-tag {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .bio-container {
+                padding: 25px;
+            }
+            
+            .contacts {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-img {
+                width: 100px;
+                height: 100px;
+                font-size: 32px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .bio-container {
+                padding: 20px;
+            }
+            
+            .name {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bio-container">
+        <div class="header">
+            <div class="profile-img">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="name">Active developer</h1>
+            <div class="age">16 лет</div>
+        </div>
+        
+        <div class="about">
+            <h3>Обо мне</h3>
+            <p>Привет! Мне 16 лет и я активно занимаюсь спортом. Люблю программирование, музыку и всё, что связано с технологиями. Всегда открыт для новых знакомств и интересных проектов!</p>
+        </div>
+        
+        <div class="contacts">
+            <div class="contact-card">
+                <i class="fab fa-whatsapp"></i>
+                <h4>WhatsApp</h4>
+                <a href="tel:+79064482898">+7 (906) 448-2898</a>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fab fa-telegram"></i>
+                <h4>Telegram</h4>
+                <a href="https://t.me/Sexy_Killed" target="_blank">@Sexy_Killed</a>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fab fa-github"></i>
+                <h4>GitHub</h4>
+                <a href="https://github.com/killedofficialbd-sys" target="_blank">Active developer</a>
+            </div>
+            
+            <div class="contact-card">
+                <i class="fab fa-spotify"></i>
+                <h4>Spotify</h4>
+                <a href="https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi?si=4b4e207a082742a9" target="_blank">Мой профиль</a>
+            </div>
+        </div>
+        
+        <div class="sports">
+            <h3><i class="fas fa-dumbbell"></i> Любимые виды спорта</h3>
+            <div class="sports-list">
+                <div class="sport-tag">Футбол</div>
+                <div class="sport-tag">Баскетбол</div>
+                <div class="sport-tag">Тренажёрный зал</div>
+                <div class="sport-tag">Бег</div>
+                <div class="sport-tag">Плавание</div>
+                <div class="sport-tag">Единоборства</div>
+            </div>
+        </div>
+        
+        <footer>
+            Active developer.
+        </footer>
+    </div>
+    
+    <script>
+        // Анимация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.bio-container');
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                container.style.transition = 'opacity 0.5s, transform 0.5s';
+                container.style.opacity = '1';
+                container.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>
