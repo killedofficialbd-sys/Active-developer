@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Developer | Портфолио</title>
+    <title>Backend Developer | Портфолио</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Глобальные стили */
         * {
             margin: 0;
             padding: 0;
@@ -26,7 +25,22 @@
             --warning: #ffaa00;
             --glass: rgba(255, 255, 255, 0.05);
             --glass-border: rgba(255, 255, 255, 0.1);
-            --console-bg: rgba(10, 10, 20, 0.95);
+            --console-bg: rgba(10, 10, 20, 0.98);
+            --terminal-green: #00ff9d;
+            --terminal-blue: #00b8ff;
+            --terminal-purple: #b200ff;
+            --server-rack: #1a1a2c;
+        }
+        
+        body.light-theme {
+            --dark-bg: #f0f2f5;
+            --darker-bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #333333;
+            --text-secondary: #666666;
+            --glass: rgba(0, 0, 0, 0.05);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --console-bg: rgba(240, 242, 245, 0.98);
         }
         
         body {
@@ -37,9 +51,9 @@
             overflow-x: hidden;
             line-height: 1.6;
             position: relative;
+            transition: background 0.3s ease, color 0.3s ease;
         }
         
-        /* Крутой 3D фон с анимацией частиц */
         .particles-3d {
             position: fixed;
             top: 0;
@@ -51,7 +65,7 @@
                 radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 80%, rgba(255, 71, 87, 0.05) 0%, transparent 50%),
-                linear-gradient(135deg, #070710 0%, #0a0a14 50%, #0f0f1f 100%);
+                linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, var(--darker-bg) 100%);
             overflow: hidden;
         }
         
@@ -92,24 +106,13 @@
         }
         
         @keyframes floatParticle {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-            25% {
-                transform: translate(100px, 100px) rotate(90deg);
-            }
-            50% {
-                transform: translate(0, 200px) rotate(180deg);
-            }
-            75% {
-                transform: translate(-100px, 100px) rotate(270deg);
-            }
-            100% {
-                transform: translate(0, 0) rotate(360deg);
-            }
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, 100px) rotate(90deg); }
+            50% { transform: translate(0, 200px) rotate(180deg); }
+            75% { transform: translate(-100px, 100px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
         
-        /* Сетка линий */
         .grid-lines {
             position: absolute;
             top: 0;
@@ -124,12 +127,8 @@
         }
         
         @keyframes gridMove {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(50px, 50px);
-            }
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
         }
         
         .container {
@@ -138,7 +137,6 @@
             padding: 20px;
         }
         
-        /* Кнопка темы */
         .theme-toggle {
             position: fixed;
             top: 20px;
@@ -164,7 +162,6 @@
             transform: rotate(180deg);
         }
         
-        /* Хедер */
         .header {
             text-align: center;
             padding: 80px 0 40px;
@@ -251,42 +248,72 @@
             transform: translateY(-3px);
         }
         
-        /* Консоль разработчика */
+        .server-rack-icon {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--server-rack);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--terminal-green);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+            animation: pulseServer 2s infinite;
+        }
+        
+        @keyframes pulseServer {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 255, 157, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(0, 255, 157, 0.6); }
+        }
+        
         .console-window {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
             width: 90%;
-            max-width: 800px;
-            height: 70vh;
+            max-width: 900px;
+            height: 80vh;
             background: var(--console-bg);
-            border: 1px solid var(--primary);
-            border-radius: 15px;
+            border: 2px solid var(--terminal-green);
+            border-radius: 10px;
             z-index: 2000;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
+            box-shadow: 0 0 50px rgba(0, 255, 157, 0.2);
             backdrop-filter: blur(20px);
             transition: transform 0.3s ease;
             display: none;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .console-window.maximized {
+            width: 98vw !important;
+            height: 98vh !important;
         }
         
         .console-header {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.9);
             padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--primary);
+            border-bottom: 2px solid var(--terminal-green);
         }
         
         .console-title {
-            color: var(--primary);
+            color: var(--terminal-green);
             font-family: monospace;
             font-size: 1.1rem;
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+        
+        .console-title i {
+            color: var(--terminal-blue);
         }
         
         .console-controls {
@@ -299,6 +326,11 @@
             height: 12px;
             border-radius: 50%;
             cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .console-btn-small:hover {
+            transform: scale(1.2);
         }
         
         .console-btn-small.close { background: #ff5f57; }
@@ -312,6 +344,7 @@
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
             line-height: 1.5;
+            background: rgba(0, 0, 0, 0.3);
         }
         
         .console-output {
@@ -321,27 +354,51 @@
         .console-line {
             margin-bottom: 8px;
             word-break: break-all;
+            padding: 2px 5px;
+            border-left: 3px solid transparent;
+            transition: background 0.2s;
+        }
+        
+        .console-line:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .console-line.command {
-            color: var(--primary);
+            color: var(--terminal-green);
+            border-left-color: var(--terminal-green);
         }
         
         .console-line.info {
-            color: var(--success);
+            color: var(--terminal-blue);
+            border-left-color: var(--terminal-blue);
         }
         
         .console-line.warning {
             color: var(--warning);
+            border-left-color: var(--warning);
         }
         
         .console-line.error {
             color: var(--accent);
+            border-left-color: var(--accent);
+        }
+        
+        .console-line.success {
+            color: var(--success);
+            border-left-color: var(--success);
         }
         
         .console-line.system {
             color: #aaa;
             font-style: italic;
+            border-left-color: #aaa;
+        }
+        
+        .console-line.ascii {
+            color: var(--terminal-purple);
+            font-family: monospace;
+            white-space: pre;
+            line-height: 1.2;
         }
         
         .console-input {
@@ -349,10 +406,13 @@
             align-items: center;
             gap: 10px;
             margin-top: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
         }
         
         .console-prompt {
-            color: var(--primary);
+            color: var(--terminal-green);
             font-weight: bold;
             white-space: nowrap;
         }
@@ -365,7 +425,7 @@
             font-family: 'Courier New', monospace;
             font-size: 0.95rem;
             outline: none;
-            caret-color: var(--primary);
+            caret-color: var(--terminal-green);
         }
         
         .console-overlay {
@@ -374,7 +434,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
             z-index: 1999;
             display: none;
         }
@@ -388,14 +449,13 @@
             display: block;
         }
         
-        /* Консоль кнопка */
         .console-btn {
             position: fixed;
             bottom: 20px;
             left: 20px;
             background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text);
+            border: 1px solid var(--terminal-green);
+            color: var(--terminal-green);
             padding: 12px 25px;
             border-radius: 25px;
             cursor: pointer;
@@ -406,15 +466,97 @@
             align-items: center;
             gap: 10px;
             font-weight: 600;
+            backdrop-filter: blur(10px);
         }
         
         .console-btn:hover {
-            background: var(--primary);
+            background: var(--terminal-green);
             color: var(--darker-bg);
             transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
         }
         
-        /* Контент */
+        .weather-widget {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+        
+        .weather-widget:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .weather-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .weather-city {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .weather-temp {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .weather-desc {
+            color: var(--text-secondary);
+            text-transform: capitalize;
+        }
+        
+        .weather-loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 217, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        .weather-error {
+            color: var(--accent);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .geolocation-btn {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .geolocation-btn:hover {
+            background: var(--primary);
+            color: var(--darker-bg);
+            border-color: var(--primary);
+        }
+        
+        .geolocation-btn:hover i {
+            color: var(--darker-bg);
+        }
+        
         .main-content {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -428,7 +570,6 @@
             }
         }
         
-        /* Карточки */
         .card {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
@@ -476,7 +617,6 @@
             color: var(--secondary);
         }
         
-        /* Статистика */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
@@ -512,7 +652,6 @@
             font-weight: 500;
         }
         
-        /* Навыки */
         .skills-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -556,7 +695,6 @@
             transform: translateY(-2px);
         }
         
-        /* Проекты */
         .projects-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -586,7 +724,7 @@
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 2rem;
+            font-size: 3rem;
         }
         
         .project-content {
@@ -606,7 +744,6 @@
             font-size: 0.95rem;
         }
         
-        /* Контакты */
         .contacts-list {
             display: flex;
             flex-direction: column;
@@ -644,7 +781,6 @@
             font-size: 1.2rem;
         }
         
-        /* Кнопки действий */
         .quick-actions {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -690,23 +826,6 @@
             border-color: var(--primary);
         }
         
-        .action-btn.whatsapp:hover {
-            background: rgba(37, 211, 102, 0.2);
-        }
-        
-        .action-btn.telegram:hover {
-            background: rgba(0, 136, 204, 0.2);
-        }
-        
-        .action-btn.github:hover {
-            background: rgba(51, 51, 51, 0.2);
-        }
-        
-        .action-btn.spotify:hover {
-            background: rgba(29, 185, 84, 0.2);
-        }
-        
-        /* Spotify стиль */
         .spotify-widget {
             background: var(--glass);
             border-radius: 15px;
@@ -753,7 +872,6 @@
             box-shadow: 0 5px 20px rgba(29, 185, 84, 0.4);
         }
         
-        /* Любимые виды спорта */
         .sports-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -792,7 +910,6 @@
             color: var(--text);
         }
         
-        /* Футер */
         .footer {
             text-align: center;
             padding: 60px 0 30px;
@@ -837,7 +954,6 @@
             font-weight: 600;
         }
         
-        /* Скачать кнопка */
         .download-cv-btn {
             width: 100%;
             padding: 18px;
@@ -878,7 +994,6 @@
             background: linear-gradient(135deg, var(--secondary), var(--primary));
         }
         
-        /* Анимации */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
@@ -903,40 +1018,6 @@
             animation: fadeInUp 0.6s ease forwards;
         }
         
-        @keyframes typing {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        
-        @keyframes blink {
-            50% { border-color: transparent; }
-        }
-        
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .name-title {
-                font-size: 2.5rem;
-            }
-            
-            .main-content {
-                gap: 20px;
-            }
-            
-            .card {
-                padding: 20px;
-            }
-            
-            .quick-actions {
-                grid-template-columns: 1fr;
-            }
-            
-            .console-window {
-                width: 95%;
-                height: 80vh;
-            }
-        }
-        
-        /* Уведомления */
         .notification {
             position: fixed;
             top: 20px;
@@ -948,24 +1029,27 @@
             transform: translateX(150%);
             transition: transform 0.3s ease;
             max-width: 300px;
+            backdrop-filter: blur(10px);
         }
         
         .notification.success {
-            background: var(--success);
+            background: rgba(0, 255, 136, 0.9);
             color: #000;
+            border-left: 5px solid #00cc6a;
         }
         
         .notification.error {
-            background: var(--accent);
+            background: rgba(255, 71, 87, 0.9);
             color: white;
+            border-left: 5px solid #cc2e3e;
         }
         
         .notification.info {
-            background: var(--primary);
+            background: rgba(0, 217, 255, 0.9);
             color: white;
+            border-left: 5px solid #0099cc;
         }
         
-        /* Модальное окно */
         .modal {
             position: fixed;
             top: 50%;
@@ -1023,10 +1107,46 @@
         .modal-close:hover {
             color: var(--accent);
         }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .name-title {
+                font-size: 2.5rem;
+            }
+            
+            .main-content {
+                gap: 20px;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .console-window {
+                width: 95%;
+                height: 80vh;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- 3D фон с частицами -->
     <div class="particles-3d">
         <div class="particle"></div>
         <div class="particle"></div>
@@ -1034,62 +1154,70 @@
         <div class="grid-lines"></div>
     </div>
     
-    <!-- Кнопка темы -->
+    <div class="server-rack-icon">
+        <i class="fas fa-server" style="color: #00ff9d;"></i>
+    </div>
+    
     <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-moon"></i>
     </button>
     
-    <!-- Консоль разработчика -->
-    <button class="console-btn" onclick="openConsole()">
-        <i class="fas fa-terminal"></i> dev console
+    <button class="console-btn" id="consoleToggleBtn">
+        <i class="fas fa-terminal"></i> backend@server:~$
     </button>
     
-    <!-- Консоль разработчика окно -->
-    <div class="console-overlay" id="consoleOverlay" onclick="closeConsole()"></div>
+    <div class="console-overlay" id="consoleOverlay"></div>
     <div class="console-window" id="consoleWindow">
         <div class="console-header">
             <div class="console-title">
                 <i class="fas fa-terminal"></i>
-                Active Developer Console v2.0
+                Backend Developer Console v3.0 [API Server Active]
             </div>
             <div class="console-controls">
-                <div class="console-btn-small minimize" onclick="minimizeConsole()"></div>
-                <div class="console-btn-small maximize" onclick="maximizeConsole()"></div>
-                <div class="console-btn-small close" onclick="closeConsole()"></div>
+                <div class="console-btn-small minimize" id="minimizeConsole"></div>
+                <div class="console-btn-small maximize" id="maximizeConsole"></div>
+                <div class="console-btn-small close" id="closeConsole"></div>
             </div>
         </div>
         <div class="console-content" id="consoleContent">
             <div class="console-output" id="consoleOutput">
-                <div class="console-line system">
-                    ========================================
+                <div class="console-line ascii">
+    ██████╗  █████╗  ██████╗██╗  ██╗███████╗███╗   ██╗██████╗ 
+    ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝████╗  ██║██╔══██╗
+    ██████╔╝███████║██║     █████╔╝ █████╗  ██╔██╗ ██║██║  ██║
+    ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██║╚██╗██║██║  ██║
+    ██████╔╝██║  ██║╚██████╗██║  ██╗███████╗██║ ╚████║██████╔╝
+    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ 
                 </div>
                 <div class="console-line system">
-                    Active Developer Console v2.0
+                    =====================================================================
                 </div>
                 <div class="console-line system">
-                    Введите 'help' для списка команд
+                    Backend Developer Console v3.0 | API Endpoint: https://api.openweathermap.org
                 </div>
                 <div class="console-line system">
-                    Введите 'clear' для очистки консоли
+                    Server Status: 🟢 ONLINE | Uptime: 99.9% | Connections: 128
                 </div>
                 <div class="console-line system">
-                    ========================================
+                    Введите 'help' для списка команд | 'weather [город]' - погода
+                </div>
+                <div class="console-line system">
+                    =====================================================================
                 </div>
             </div>
             <div class="console-input">
-                <span class="console-prompt">$&gt;</span>
+                <span class="console-prompt">backend@server:~$</span>
                 <input type="text" class="console-input-field" id="consoleInput" 
-                       placeholder="Введите команду..." autocomplete="off" onkeypress="handleConsoleEnter(event)">
+                       placeholder="Введите команду..." autocomplete="off">
             </div>
         </div>
     </div>
     
-    <!-- Модальное окно проекта -->
-    <div class="modal-overlay" id="projectModalOverlay" onclick="closeProjectModal()"></div>
+    <div class="modal-overlay" id="projectModalOverlay"></div>
     <div class="modal" id="projectModal">
         <div class="modal-header">
             <h2 id="modalTitle">Проект</h2>
-            <button class="modal-close" onclick="closeProjectModal()">×</button>
+            <button class="modal-close" id="closeModalBtn">×</button>
         </div>
         <div id="modalContent">
             <p>Содержимое проекта...</p>
@@ -1097,57 +1225,52 @@
     </div>
     
     <div class="container">
-        <!-- Хедер -->
         <header class="header fade-in">
             <div class="avatar-section floating">
                 <div class="avatar-container">
                     <img src="https://raw.githubusercontent.com/killedofficialbd-sys/Active-developer/main/photo_2025-12-15_17-24-12.jpg" 
                          alt="Аватар" class="avatar" id="userAvatar">
                 </div>
-                <h1 class="name-title">Active Developer</h1>
+                <h1 class="name-title">Backend Developer</h1>
                 <div class="typewriter" id="typewriter"></div>
-                <p class="subtitle">Разработчик • Спортсмен • 16 лет</p>
+                <p class="subtitle">Серверная магия • API архитектор • 16 лет</p>
                 
                 <div class="badges">
                     <div class="badge">
-                        <i class="fas fa-code"></i>
-                        <span>Веб-разработка</span>
+                        <i class="fas fa-server"></i>
+                        <span>Backend</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-dumbbell"></i>
-                        <span>Спорт</span>
+                        <i class="fas fa-database"></i>
+                        <span>Базы данных</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-music"></i>
-                        <span>Музыка</span>
+                        <i class="fas fa-cloud"></i>
+                        <span>API</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-gamepad"></i>
-                        <span>Гейминг</span>
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Безопасность</span>
                     </div>
                 </div>
             </div>
         </header>
         
-        <!-- Основной контент -->
         <main class="main-content">
-            <!-- Левая колонка -->
             <div class="info-column">
-                <!-- Обо мне -->
                 <section class="card fade-in">
                     <h2 class="card-title">
-                        <i class="fas fa-user-astronaut"></i>
+                        <i class="fas fa-user-ninja"></i>
                         Обо мне
                     </h2>
                     <p style="color: var(--text-secondary); line-height: 1.8; font-size: 1.1rem;">
-                        16-летний разработчик с страстью к созданию инновационных веб-приложений. 
-                        Занимаюсь программированием более года, постоянно изучаю новые технологии. 
-                        В свободное время тренируюсь, слушаю музыку и работаю над персональными проектами. 
-                        Верю в силу саморазвития и всегда открыт для новых вызовов.
+                        16-летний backend разработчик с фокусом на создание масштабируемых серверных решений. 
+                        Специализируюсь на Node.js, Python и проектировании REST API. 
+                        В свободное время разрабатываю ботов, автоматизирую процессы и изучаю системное программирование.
+                        Верю, что хороший бэкенд — это фундамент любого успешного проекта.
                     </p>
                 </section>
                 
-                <!-- Статистика -->
                 <section class="card fade-in" style="animation-delay: 0.1s">
                     <h2 class="card-title">
                         <i class="fas fa-chart-line"></i>
@@ -1155,109 +1278,141 @@
                     </h2>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <div class="stat-number">365+</div>
-                            <div class="stat-label">Дней кодинга</div>
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">API запросов/день</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">15+</div>
-                            <div class="stat-label">Проектов</div>
+                            <div class="stat-number">25+</div>
+                            <div class="stat-label">Backend проектов</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">300+</div>
-                            <div class="stat-label">Коммитов</div>
+                            <div class="stat-number">1000+</div>
+                            <div class="stat-label">Часов кодинга</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">7/7</div>
-                            <div class="stat-label">Дней тренировок</div>
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">Аптайм серверов</div>
                         </div>
                     </div>
                 </section>
                 
-                <!-- Навыки -->
                 <section class="card fade-in" style="animation-delay: 0.2s">
                     <h2 class="card-title">
                         <i class="fas fa-laptop-code"></i>
-                        Технологический стек
+                        Backend стек
                     </h2>
                     <div class="skills-container">
                         <div class="skill-category">
                             <h3 class="category-title">
-                                <i class="fab fa-html5"></i>
-                                Frontend
+                                <i class="fas fa-code"></i>
+                                Языки
                             </h3>
                             <div class="skill-tags">
-                                <span class="skill-tag">HTML5</span>
-                                <span class="skill-tag">CSS3</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">Python</span>
                                 <span class="skill-tag">JavaScript</span>
-                                <span class="skill-tag">React</span>
-                                <span class="skill-tag">Vue.js</span>
-                                <span class="skill-tag">SASS</span>
+                                <span class="skill-tag">TypeScript</span>
+                                <span class="skill-tag">PHP</span>
+                                <span class="skill-tag">Bash</span>
                             </div>
                         </div>
                         
                         <div class="skill-category">
                             <h3 class="category-title">
-                                <i class="fas fa-server"></i>
-                                Backend
+                                <i class="fas fa-database"></i>
+                                Базы данных
                             </h3>
                             <div class="skill-tags">
-                                <span class="skill-tag">Node.js</span>
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">Express</span>
                                 <span class="skill-tag">MongoDB</span>
                                 <span class="skill-tag">MySQL</span>
+                                <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">Redis</span>
+                                <span class="skill-tag">SQLite</span>
+                                <span class="skill-tag">Firebase</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-plug"></i>
+                                API & Фреймворки
+                            </h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Express.js</span>
+                                <span class="skill-tag">Django</span>
+                                <span class="skill-tag">Flask</span>
+                                <span class="skill-tag">FastAPI</span>
+                                <span class="skill-tag">GraphQL</span>
+                                <span class="skill-tag">REST</span>
+                                <span class="skill-tag">WebSocket</span>
                             </div>
                         </div>
                         
                         <div class="skill-category">
                             <h3 class="category-title">
                                 <i class="fas fa-tools"></i>
-                                Инструменты
+                                DevOps & Инструменты
                             </h3>
                             <div class="skill-tags">
-                                <span class="skill-tag">Git</span>
-                                <span class="skill-tag">GitHub</span>
-                                <span class="skill-tag">VS Code</span>
-                                <span class="skill-tag">Notepad++</span>
-                                <span class="skill-tag">Figma</span>
                                 <span class="skill-tag">Docker</span>
+                                <span class="skill-tag">Nginx</span>
+                                <span class="skill-tag">Git</span>
+                                <span class="skill-tag">GitHub Actions</span>
+                                <span class="skill-tag">Postman</span>
+                                <span class="skill-tag">Linux</span>
+                                <span class="skill-tag">AWS (базово)</span>
                             </div>
                         </div>
                     </div>
                 </section>
                 
-                <!-- Проекты -->
                 <section class="card fade-in" style="animation-delay: 0.4s">
                     <h2 class="card-title">
                         <i class="fas fa-rocket"></i>
-                        Избранные проекты
+                        Backend проекты
                     </h2>
                     <div class="projects-grid">
-                        <div class="project-card" onclick="openProjectModal('portfolio')">
+                        <div class="project-card" data-project="api-gateway">
                             <div class="project-image">
-                                <i class="fas fa-laptop"></i>
+                                <i class="fas fa-cloud"></i>
                             </div>
                             <div class="project-content">
-                                <h3 class="project-title">Портфолио</h3>
-                                <p class="project-desc">Современное портфолио с интерактивными элементами</p>
+                                <h3 class="project-title">API Gateway</h3>
+                                <p class="project-desc">Микросервисная архитектура с балансировкой нагрузки</p>
                                 <div class="skill-tags">
-                                    <span class="skill-tag">HTML</span>
-                                    <span class="skill-tag">CSS</span>
-                                    <span class="skill-tag">JS</span>
+                                    <span class="skill-tag">Node.js</span>
+                                    <span class="skill-tag">Express</span>
+                                    <span class="skill-tag">Redis</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="project-card" onclick="openProjectModal('automation')">
+                        <div class="project-card" data-project="telegram-bot">
                             <div class="project-image">
-                                <i class="fas fa-robot"></i>
+                                <i class="fab fa-telegram"></i>
                             </div>
                             <div class="project-content">
-                                <h3 class="project-title">Автоматизация</h3>
-                                <p class="project-desc">Скрипты для автоматизации рутинных задач</p>
+                                <h3 class="project-title">Telegram Bot API</h3>
+                                <p class="project-desc">Многофункциональный бот с базой данных</p>
                                 <div class="skill-tags">
                                     <span class="skill-tag">Python</span>
-                                    <span class="skill-tag">Bash</span>
+                                    <span class="skill-tag">MongoDB</span>
+                                    <span class="skill-tag">Aiogram</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card" data-project="auth-system">
+                            <div class="project-image">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <div class="project-content">
+                                <h3 class="project-title">Auth System</h3>
+                                <p class="project-desc">JWT аутентификация с refresh токенами</p>
+                                <div class="skill-tags">
+                                    <span class="skill-tag">JWT</span>
+                                    <span class="skill-tag">PostgreSQL</span>
+                                    <span class="skill-tag">FastAPI</span>
                                 </div>
                             </div>
                         </div>
@@ -1265,9 +1420,7 @@
                 </section>
             </div>
             
-            <!-- Правая колонка -->
             <div class="contacts-column">
-                <!-- Контакты -->
                 <section class="card fade-in" style="animation-delay: 0.2s">
                     <h2 class="card-title">
                         <i class="fas fa-comments"></i>
@@ -1275,7 +1428,7 @@
                     </h2>
                     <div class="contacts-list">
                         <a href="https://wa.me/79064482898?text=Привет! Пишу с твоего сайта." 
-                           class="contact-item" target="_blank">
+                           class="contact-item" target="_blank" rel="noopener noreferrer">
                             <div class="contact-icon">
                                 <i class="fab fa-whatsapp"></i>
                             </div>
@@ -1285,7 +1438,7 @@
                             </div>
                         </a>
                         
-                        <a href="https://t.me/Sexy_Killed" class="contact-item" target="_blank">
+                        <a href="https://t.me/Sexy_Killed" class="contact-item" target="_blank" rel="noopener noreferrer">
                             <div class="contact-icon">
                                 <i class="fab fa-telegram"></i>
                             </div>
@@ -1295,7 +1448,7 @@
                             </div>
                         </a>
                         
-                        <a href="https://github.com/killedofficialbd-sys" class="contact-item" target="_blank">
+                        <a href="https://github.com/killedofficialbd-sys" class="contact-item" target="_blank" rel="noopener noreferrer">
                             <div class="contact-icon">
                                 <i class="fab fa-github"></i>
                             </div>
@@ -1307,18 +1460,55 @@
                     </div>
                     
                     <div class="quick-actions">
-                        <a href="https://wa.me/79064482898" class="action-btn whatsapp" target="_blank">
+                        <a href="https://wa.me/79064482898" class="action-btn whatsapp" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-whatsapp"></i>
                             Написать
                         </a>
-                        <a href="https://t.me/Sexy_Killed" class="action-btn telegram" target="_blank">
+                        <a href="https://t.me/Sexy_Killed" class="action-btn telegram" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-telegram"></i>
                             Telegram
                         </a>
                     </div>
                 </section>
                 
-                <!-- Spotify -->
+                <section class="card fade-in" style="animation-delay: 0.25s">
+                    <h2 class="card-title">
+                        <i class="fas fa-cloud-sun"></i>
+                        Погода
+                    </h2>
+                    <div class="weather-widget" id="weatherWidget">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div class="weather-header">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span class="weather-city" id="weatherCity">Загрузка...</span>
+                                <span id="weatherLoader" class="weather-loader" style="display: none;"></span>
+                            </div>
+                            <button class="geolocation-btn" id="geolocationBtn">
+                                <i class="fas fa-location-dot"></i>
+                                Мое местоположение
+                            </button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div class="weather-temp" id="weatherTemp">--°C</div>
+                                <div class="weather-desc" id="weatherDesc">--</div>
+                            </div>
+                            <div id="weatherIcon" style="font-size: 3rem;">🌍</div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 15px; color: var(--text-secondary);">
+                            <span><i class="fas fa-tint"></i> Влажность: <span id="weatherHumidity">--%</span></span>
+                            <span><i class="fas fa-wind"></i> Ветер: <span id="weatherWind">-- м/с</span></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 5px; color: var(--text-secondary); font-size: 0.9rem;">
+                            <span><i class="fas fa-compress"></i> Давление: <span id="weatherPressure">-- гПа</span></span>
+                            <span><i class="fas fa-eye"></i> Видимость: <span id="weatherVisibility">-- км</span></span>
+                        </div>
+                        <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem;">
+                            <i class="fas fa-terminal"></i> Введи в консоль: weather [город]
+                        </p>
+                    </div>
+                </section>
+                
                 <section class="card fade-in" style="animation-delay: 0.3s">
                     <h2 class="card-title">
                         <i class="fab fa-spotify"></i>
@@ -1332,7 +1522,7 @@
                             Слушай мой плейлист
                         </div>
                         <a href="https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi?si=4b4e207a082742a9" 
-                           class="spotify-btn" target="_blank">
+                           class="spotify-btn" target="_blank" rel="noopener noreferrer">
                             Открыть в Spotify
                         </a>
                     </div>
@@ -1340,11 +1530,10 @@
                     <div class="skill-tags" style="margin-top: 20px;">
                         <span class="skill-tag">Бассы</span>
                         <span class="skill-tag">Фонк</span>
-                        <!-- Убраны: Техно, Электроника, Lo-Fi, Рок -->
+                        <span class="skill-tag">Lo-Fi для кода</span>
                     </div>
                 </section>
                 
-                <!-- Любимые виды спорта -->
                 <section class="card fade-in" style="animation-delay: 0.5s">
                     <h2 class="card-title">
                         <i class="fas fa-running"></i>
@@ -1378,7 +1567,6 @@
                     </div>
                 </section>
                 
-                <!-- Скачать CV -->
                 <section class="card fade-in" style="animation-delay: 0.6s">
                     <h2 class="card-title">
                         <i class="fas fa-file-download"></i>
@@ -1387,7 +1575,7 @@
                     <p style="color: var(--text-secondary); margin-bottom: 20px;">
                         Скачайте полную информацию в формате PDF
                     </p>
-                    <button class="download-cv-btn" onclick="downloadCV()">
+                    <button class="download-cv-btn" id="downloadCVBtn">
                         <i class="fas fa-file-pdf"></i>
                         Скачать резюме (PDF)
                     </button>
@@ -1395,806 +1583,696 @@
             </div>
         </main>
         
-        <!-- Футер -->
         <footer class="footer fade-in" style="animation-delay: 0.7s">
             <h3 style="font-size: 2rem; margin-bottom: 20px;">
-                <span style="color: var(--primary);">Active</span>
+                <span style="color: var(--primary);">Backend</span>
                 <span style="color: var(--text);">Developer</span>
             </h3>
             
             <div class="social-links">
-                <a href="https://t.me/Sexy_Killed" class="social-link" target="_blank">
+                <a href="https://t.me/Sexy_Killed" class="social-link" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-telegram"></i>
                 </a>
-                <a href="https://github.com/killedofficialbd-sys" class="social-link" target="_blank">
+                <a href="https://github.com/killedofficialbd-sys" class="social-link" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="https://wa.me/79064482898" class="social-link" target="_blank">
+                <a href="https://wa.me/79064482898" class="social-link" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-whatsapp"></i>
                 </a>
                 <a href="https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi" 
-                   class="social-link" target="_blank">
+                   class="social-link" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-spotify"></i>
                 </a>
             </div>
             
             <div class="footer-text">
-                Active Developer
+                Backend Developer • API & Серверы
             </div>
         </footer>
     </div>
-    
+
     <script>
-        // Инициализация
-        document.addEventListener('DOMContentLoaded', function() {
-            // Плавное появление элементов
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.style.opacity = 1;
-                        entry.target.style.transform = 'translateY(0)';
+        (function(){
+            const CONFIG = {
+                WEATHER_API_KEY: 'ec375d8205e426e86c6dd5cb96de5f02',
+                WEATHER_API_URL: 'https://api.openweathermap.org/data/2.5/weather',
+                STORAGE_KEYS: {
+                    LAST_CITY: 'weather_last_city',
+                    LAST_DATA: 'weather_last_data',
+                    THEME: 'app_theme',
+                    CONSOLE_HISTORY: 'console_history'
+                }
+            };
+            
+            const State = {
+                currentWeatherData: null,
+                consoleHistory: [],
+                consoleHistoryIndex: -1,
+                consoleCommandsCount: 0,
+                isConsoleMaximized: false
+            };
+            
+            const Storage = {
+                save(key, data) {
+                    try {
+                        localStorage.setItem(key, JSON.stringify({
+                            data,
+                            timestamp: Date.now()
+                        }));
+                        return true;
+                    } catch {
+                        return false;
                     }
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.card').forEach(card => {
-                observer.observe(card);
-            });
-            
-            // Запуск анимаций
-            startTypewriter();
-            
-            // Инициализация консоли
-            initConsole();
-            
-            // Консоль разработчика
-            console.log('%c👨‍💻 Active Developer Console v2.0', 'color: #00d9ff; font-size: 20px; font-weight: bold;');
-            console.log('%cДобро пожаловать в систему!', 'color: #8a2be2;');
-            console.log('%cВведите "help" в консоли для списка команд', 'color: #ff4757;');
-            console.log('%cГотов к работе! 🚀', 'color: #00ff88;');
-        });
-        
-        // Машина печати
-        function startTypewriter() {
-            const texts = [
-                'Full-Stack Разработчик',
-                'Спортсмен',
-                'Меломан',
-                'Создатель инноваций'
-            ];
-            let textIndex = 0;
-            let charIndex = 0;
-            const typewriter = document.getElementById('typewriter');
-            
-            function type() {
-                if (charIndex < texts[textIndex].length) {
-                    typewriter.innerHTML = texts[textIndex].substring(0, charIndex + 1);
-                    charIndex++;
-                    setTimeout(type, 100);
-                } else {
-                    setTimeout(erase, 2000);
-                }
-            }
-            
-            function erase() {
-                if (charIndex > 0) {
-                    typewriter.innerHTML = texts[textIndex].substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(erase, 50);
-                } else {
-                    textIndex = (textIndex + 1) % texts.length;
-                    setTimeout(type, 500);
-                }
-            }
-            
-            setTimeout(type, 1000);
-        }
-        
-        // ========== СИСТЕМА КОНСОЛИ ==========
-        let consoleHistory = [];
-        let historyIndex = -1;
-        
-        function initConsole() {
-            // Фокус на поле ввода при открытии консоли
-            document.getElementById('consoleInput').addEventListener('keydown', function(e) {
-                if (e.key === 'ArrowUp') {
-                    e.preventDefault();
-                    if (consoleHistory.length > 0) {
-                        if (historyIndex < consoleHistory.length - 1) {
-                            historyIndex++;
-                        } else {
-                            historyIndex = 0;
+                },
+                
+                load(key, ttl = 3600000) {
+                    try {
+                        const item = localStorage.getItem(key);
+                        if (!item) return null;
+                        
+                        const parsed = JSON.parse(item);
+                        
+                        if (Date.now() - parsed.timestamp > ttl) {
+                            localStorage.removeItem(key);
+                            return null;
                         }
-                        this.value = consoleHistory[historyIndex];
+                        
+                        return parsed.data;
+                    } catch {
+                        return null;
                     }
-                } else if (e.key === 'ArrowDown') {
-                    e.preventDefault();
-                    if (consoleHistory.length > 0) {
-                        if (historyIndex > 0) {
-                            historyIndex--;
-                        } else {
-                            historyIndex = consoleHistory.length - 1;
-                        }
-                        this.value = consoleHistory[historyIndex] || '';
-                    }
+                },
+                
+                remove(key) {
+                    localStorage.removeItem(key);
                 }
-            });
-        }
-        
-        // Открыть консоль
-        function openConsole() {
-            document.getElementById('consoleWindow').classList.add('active');
-            document.getElementById('consoleOverlay').classList.add('active');
-            document.getElementById('consoleInput').focus();
+            };
             
-            // Показать приветственное сообщение
-            addConsoleOutput('system', 'Консоль разработчика активирована');
-            addConsoleOutput('system', 'Введите "help" для списка команд');
-        }
-        
-        // Закрыть консоль
-        function closeConsole() {
-            document.getElementById('consoleWindow').classList.remove('active');
-            document.getElementById('consoleOverlay').classList.remove('active');
-        }
-        
-        // Минимизировать консоль
-        function minimizeConsole() {
-            showNotification('Консоль минимизирована', 'info');
-            closeConsole();
-        }
-        
-        // Максимизировать консоль
-        function maximizeConsole() {
-            const consoleWindow = document.getElementById('consoleWindow');
-            if (consoleWindow.style.width === '95vw') {
-                consoleWindow.style.width = '90%';
-                consoleWindow.style.height = '70vh';
-            } else {
-                consoleWindow.style.width = '95vw';
-                consoleWindow.style.height = '95vh';
-            }
-        }
-        
-        // Обработка ввода в консоли
-        function handleConsoleEnter(event) {
-            if (event.key === 'Enter') {
-                const input = document.getElementById('consoleInput');
-                const command = input.value.trim();
-                
-                if (command) {
-                    // Добавить команду в историю
-                    consoleHistory.unshift(command);
-                    historyIndex = -1;
+            const Notifications = {
+                show(message, type = 'info', duration = 3000) {
+                    const notification = document.createElement('div');
+                    notification.className = `notification ${type}`;
+                    notification.innerHTML = `
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fas ${this._getIcon(type)}"></i>
+                            <span>${message}</span>
+                        </div>
+                    `;
                     
-                    // Показать команду
-                    addConsoleOutput('command', `$&gt; ${command}`);
+                    document.body.appendChild(notification);
                     
-                    // Обработать команду
-                    processCommand(command);
-                    
-                    // Очистить поле ввода
-                    input.value = '';
-                }
-            }
-        }
-        
-        // Добавить вывод в консоль
-        function addConsoleOutput(type, message) {
-            const output = document.getElementById('consoleOutput');
-            const line = document.createElement('div');
-            line.className = `console-line ${type}`;
-            line.textContent = message;
-            output.appendChild(line);
-            
-            // Прокрутить вниз
-            const consoleContent = document.getElementById('consoleContent');
-            consoleContent.scrollTop = consoleContent.scrollHeight;
-        }
-        
-        // Обработка команд
-        function processCommand(command) {
-            const cmd = command.toLowerCase();
-            
-            // Список всех команд
-            const commands = {
-                help: () => {
-                    addConsoleOutput('info', '=== ДОСТУПНЫЕ КОМАНДЫ ===');
-                    addConsoleOutput('system', 'help - показать этот список');
-                    addConsoleOutput('system', 'clear - очистить консоль');
-                    addConsoleOutput('system', 'theme - переключить тему');
-                    addConsoleOutput('system', 'time - текущее время');
-                    addConsoleOutput('system', 'date - текущая дата');
-                    addConsoleOutput('system', 'about - информация о разработчике');
-                    addConsoleOutput('system', 'skills - показать навыки');
-                    addConsoleOutput('system', 'projects - показать проекты');
-                    addConsoleOutput('system', 'contact - контактная информация');
-                    addConsoleOutput('system', 'github - открыть GitHub');
-                    addConsoleOutput('system', 'telegram - открыть Telegram');
-                    addConsoleOutput('system', 'whatsapp - открыть WhatsApp');
-                    addConsoleOutput('system', 'spotify - открыть Spotify');
-                    addConsoleOutput('system', 'cv - скачать резюме');
-                    addConsoleOutput('system', 'stats - показать статистику');
-                    addConsoleOutput('system', 'sports - любимые виды спорта');
-                    addConsoleOutput('system', 'music - музыкальные предпочтения');
-                    addConsoleOutput('system', 'system - информация о системе');
-                    addConsoleOutput('system', 'joke - случайная шутка');
-                    addConsoleOutput('system', 'quote - случайная цитата');
-                    addConsoleOutput('system', 'weather - погода (заглушка)');
-                    addConsoleOutput('system', 'ping - проверить связь');
-                    addConsoleOutput('system', 'echo [текст] - повторить текст');
-                    addConsoleOutput('system', 'calc [выражение] - калькулятор');
-                    addConsoleOutput('system', '==================================');
-                },
-                
-                clear: () => {
-                    document.getElementById('consoleOutput').innerHTML = '';
-                    addConsoleOutput('system', 'Консоль очищена');
-                },
-                
-                theme: () => {
-                    themeToggle.click();
-                    addConsoleOutput('info', 'Тема переключена');
-                },
-                
-                time: () => {
-                    const now = new Date();
-                    const time = now.toLocaleTimeString('ru-RU');
-                    addConsoleOutput('info', `Текущее время: ${time}`);
-                },
-                
-                date: () => {
-                    const now = new Date();
-                    const date = now.toLocaleDateString('ru-RU', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                    });
-                    addConsoleOutput('info', `Текущая дата: ${date}`);
-                },
-                
-                about: () => {
-                    addConsoleOutput('info', '=== ACTIVE DEVELOPER ===');
-                    addConsoleOutput('system', '16-летний Full-Stack разработчик');
-                    addConsoleOutput('system', 'Занимаюсь программированием более года');
-                    addConsoleOutput('system', 'Спортсмен, меломан, геймер');
-                    addConsoleOutput('system', 'Люблю создавать инновационные проекты');
-                },
-                
-                skills: () => {
-                    addConsoleOutput('info', '=== ТЕХНОЛОГИЧЕСКИЙ СТЕК ===');
-                    addConsoleOutput('system', 'Frontend: HTML5, CSS3, JavaScript, React, Vue.js, SASS');
-                    addConsoleOutput('system', 'Backend: Node.js, Python, Express, MongoDB, MySQL');
-                    addConsoleOutput('system', 'Инструменты: Git, GitHub, VS Code, Figma, Docker');
-                },
-                
-                projects: () => {
-                    addConsoleOutput('info', '=== ПРОЕКТЫ ===');
-                    addConsoleOutput('system', '1. Портфолио - современное веб-портфолио');
-                    addConsoleOutput('system', '2. Автоматизация - скрипты для рутинных задач');
-                    addConsoleOutput('system', '3. Веб-приложения - различные проекты на React/Vue');
-                },
-                
-                contact: () => {
-                    addConsoleOutput('info', '=== КОНТАКТЫ ===');
-                    addConsoleOutput('system', 'WhatsApp: +7 (906) 448-28-98');
-                    addConsoleOutput('system', 'Telegram: @Sexy_Killed');
-                    addConsoleOutput('system', 'GitHub: killedofficialbd-sys');
-                    addConsoleOutput('system', 'Spotify: Active Developer');
-                },
-                
-                github: () => {
-                    addConsoleOutput('info', 'Открываю GitHub...');
-                    window.open('https://github.com/killedofficialbd-sys', '_blank');
-                },
-                
-                telegram: () => {
-                    addConsoleOutput('info', 'Открываю Telegram...');
-                    window.open('https://t.me/Sexy_Killed', '_blank');
-                },
-                
-                whatsapp: () => {
-                    addConsoleOutput('info', 'Открываю WhatsApp...');
-                    window.open('https://wa.me/79064482898', '_blank');
-                },
-                
-                spotify: () => {
-                    addConsoleOutput('info', 'Открываю Spotify...');
-                    window.open('https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi', '_blank');
-                },
-                
-                cv: () => {
-                    addConsoleOutput('info', 'Скачиваю резюме...');
-                    downloadCV();
-                },
-                
-                stats: () => {
-                    addConsoleOutput('info', '=== СТАТИСТИКА ===');
-                    addConsoleOutput('system', 'Дней кодинга: 365+');
-                    addConsoleOutput('system', 'Проектов: 15+');
-                    addConsoleOutput('system', 'Коммитов: 300+');
-                    addConsoleOutput('system', 'Дней тренировок: 7/7');
-                    addConsoleOutput('system', 'Возраст: 16 лет');
-                },
-                
-                sports: () => {
-                    addConsoleOutput('info', '=== ЛЮБИМЫЕ ВИДЫ СПОРТА ===');
-                    addConsoleOutput('system', '• Футбол');
-                    addConsoleOutput('system', '• Баскетбол');
-                    addConsoleOutput('system', '• Тренажерный зал');
-                    addConsoleOutput('system', '• Бег');
-                    addConsoleOutput('system', '• Плавание');
-                    addConsoleOutput('system', '• Единоборства');
-                },
-                
-                music: () => {
-                    addConsoleOutput('info', '=== МУЗЫКАЛЬНЫЕ ПРЕДПОЧТЕНИЯ ===');
-                    addConsoleOutput('system', '• Бассы');
-                    addConsoleOutput('system', '• Фонк');
-                    addConsoleOutput('system', '• Электронная музыка');
-                },
-                
-                system: () => {
-                    addConsoleOutput('info', '=== ИНФОРМАЦИЯ О СИСТЕМЕ ===');
-                    addConsoleOutput('system', `Браузер: ${navigator.userAgent}`);
-                    addConsoleOutput('system', `Платформа: ${navigator.platform}`);
-                    addConsoleOutput('system', `Язык: ${navigator.language}`);
-                    addConsoleOutput('system', `Онлайн: ${navigator.onLine ? 'Да' : 'Нет'}`);
-                    addConsoleOutput('system', `Cookies: ${navigator.cookieEnabled ? 'Включены' : 'Отключены'}`);
-                    addConsoleOutput('system', `Память: ${performance.memory ? Math.round(performance.memory.usedJSHeapSize / 1048576) + 'MB / ' + Math.round(performance.memory.totalJSHeapSize / 1048576) + 'MB' : 'Недоступно'}`);
-                },
-                
-                joke: () => {
-                    const jokes = [
-                        "Почему программист не пьет чай? Потому что ему нужно много кофе (coffee) для работы!",
-                        "Что говорит программист, когда ему холодно? Брр-экет!",
-                        "Почему Python не любит зиму? Потому что он Python, а не Pycold!",
-                        "Как программист называет свой холодильник? GitHub, потому что там хранятся все его коммиты!",
-                        "Почему JavaScript разработчик пошел в бар? Чтобы найти undefined!"
-                    ];
-                    const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
-                    addConsoleOutput('info', `Шутка: ${randomJoke}`);
-                },
-                
-                quote: () => {
-                    const quotes = [
-                        "Код — это поэзия, написанная на языке машин.",
-                        "Ошибка — это не конец света, это начало отладки.",
-                        "Лучший код — это тот, который не нужно писать.",
-                        "Программирование — это искусство создавать мир из ничего.",
-                        "Сначала сделай рабочим, потом сделай правильным, потом сделай быстрым."
-                    ];
-                    const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-                    addConsoleOutput('info', `Цитата: "${randomQuote}"`);
-                },
-                
-                weather: () => {
-                    addConsoleOutput('info', 'Погода: 🌤️ Солнечно, +21°C');
-                    addConsoleOutput('system', 'Обновление данных... (заглушка)');
-                },
-                
-                ping: () => {
-                    const start = Date.now();
+                    setTimeout(() => notification.style.transform = 'translateX(0)', 100);
                     setTimeout(() => {
-                        const latency = Date.now() - start;
-                        addConsoleOutput('info', `Pong! Задержка: ${latency}ms`);
-                    }, 100);
+                        notification.style.transform = 'translateX(150%)';
+                        setTimeout(() => notification.remove(), 300);
+                    }, duration);
                 },
                 
-                echo: () => {
-                    const text = command.substring(5);
-                    if (text) {
-                        addConsoleOutput('info', text);
-                    } else {
-                        addConsoleOutput('error', 'Использование: echo [текст]');
+                _getIcon(type) {
+                    const icons = {
+                        success: 'fa-check-circle',
+                        error: 'fa-exclamation-circle',
+                        warning: 'fa-exclamation-triangle',
+                        info: 'fa-info-circle'
+                    };
+                    return icons[type] || icons.info;
+                }
+            };
+            
+            const Weather = {
+                async fetchWeather(city) {
+                    this._showLoader(true);
+                    
+                    try {
+                        const url = `${CONFIG.WEATHER_API_URL}?q=${encodeURIComponent(city)}&appid=${CONFIG.WEATHER_API_KEY}&units=metric&lang=ru`;
+                        const response = await fetch(url);
+                        
+                        if (!response.ok) {
+                            if (response.status === 404) throw new Error(`Город "${city}" не найден`);
+                            if (response.status === 401) throw new Error('Ошибка авторизации API');
+                            throw new Error(`Ошибка API: ${response.status}`);
+                        }
+                        
+                        const data = await response.json();
+                        
+                        Storage.save(CONFIG.STORAGE_KEYS.LAST_CITY, city);
+                        Storage.save(CONFIG.STORAGE_KEYS.LAST_DATA, data);
+                        
+                        this._updateUI(data);
+                        return data;
+                        
+                    } catch (error) {
+                        this._showError(error.message);
+                        throw error;
+                    } finally {
+                        this._showLoader(false);
                     }
                 },
                 
-                calc: () => {
-                    const expression = command.substring(5);
-                    if (expression) {
-                        try {
-                            // Безопасный eval с проверкой
-                            const result = Function('"use strict"; return (' + expression + ')')();
-                            addConsoleOutput('info', `${expression} = ${result}`);
-                        } catch (error) {
-                            addConsoleOutput('error', 'Ошибка вычисления: ' + error.message);
+                async fetchWeatherByCoords(lat, lon) {
+                    this._showLoader(true);
+                    
+                    try {
+                        const url = `${CONFIG.WEATHER_API_URL}?lat=${lat}&lon=${lon}&appid=${CONFIG.WEATHER_API_KEY}&units=metric&lang=ru`;
+                        const response = await fetch(url);
+                        
+                        if (!response.ok) throw new Error(`Ошибка API: ${response.status}`);
+                        
+                        const data = await response.json();
+                        
+                        Storage.save(CONFIG.STORAGE_KEYS.LAST_CITY, data.name);
+                        Storage.save(CONFIG.STORAGE_KEYS.LAST_DATA, data);
+                        
+                        this._updateUI(data);
+                        Notifications.show(`Погода определена: ${data.name}`, 'success');
+                        return data;
+                        
+                    } catch (error) {
+                        this._showError('Не удалось получить погоду по координатам');
+                        throw error;
+                    } finally {
+                        this._showLoader(false);
+                    }
+                },
+                
+                getUserLocation() {
+                    if (!navigator.geolocation) {
+                        Notifications.show('Геолокация не поддерживается', 'error');
+                        return;
+                    }
+                    
+                    Notifications.show('Запрос местоположения...', 'info');
+                    
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            this.fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
+                        },
+                        (error) => {
+                            let message = 'Не удалось определить местоположение';
+                            if (error.code === error.PERMISSION_DENIED) {
+                                message = 'Доступ к геолокации запрещен';
+                            }
+                            Notifications.show(message, 'error');
+                            this._loadLastWeather();
+                        },
+                        {
+                            enableHighAccuracy: true,
+                            timeout: 10000,
+                            maximumAge: 0
                         }
+                    );
+                },
+                
+                _updateUI(data) {
+                    const getEl = (id) => document.getElementById(id);
+                    
+                    getEl('weatherCity') && (getEl('weatherCity').textContent = `${data.name}, ${data.sys.country}`);
+                    getEl('weatherTemp') && (getEl('weatherTemp').textContent = `${Math.round(data.main.temp)}°C`);
+                    getEl('weatherDesc') && (getEl('weatherDesc').textContent = data.weather[0].description);
+                    getEl('weatherHumidity') && (getEl('weatherHumidity').textContent = `${data.main.humidity}%`);
+                    getEl('weatherWind') && (getEl('weatherWind').textContent = `${data.wind.speed} м/с`);
+                    getEl('weatherPressure') && (getEl('weatherPressure').textContent = `${data.main.pressure} гПа`);
+                    getEl('weatherVisibility') && (getEl('weatherVisibility').textContent = `${(data.visibility / 1000).toFixed(1)} км`);
+                    
+                    const iconEl = getEl('weatherIcon');
+                    if (iconEl) {
+                        const iconCode = data.weather[0].icon;
+                        const icons = {
+                            '01d': '☀️', '01n': '🌙', '02d': '⛅', '02n': '☁️',
+                            '03d': '☁️', '03n': '☁️', '04d': '☁️', '04n': '☁️',
+                            '09d': '🌧️', '09n': '🌧️', '10d': '🌦️', '10n': '🌧️',
+                            '11d': '⛈️', '11n': '⛈️', '13d': '❄️', '13n': '❄️',
+                            '50d': '🌫️', '50n': '🌫️'
+                        };
+                        iconEl.textContent = icons[iconCode] || '☀️';
+                    }
+                    
+                    State.currentWeatherData = data;
+                },
+                
+                _showError(message) {
+                    const getEl = (id) => document.getElementById(id);
+                    
+                    getEl('weatherCity') && (getEl('weatherCity').textContent = 'Ошибка');
+                    getEl('weatherTemp') && (getEl('weatherTemp').textContent = '--°C');
+                    getEl('weatherDesc') && (getEl('weatherDesc').textContent = message);
+                    getEl('weatherHumidity') && (getEl('weatherHumidity').textContent = '--%');
+                    getEl('weatherWind') && (getEl('weatherWind').textContent = '-- м/с');
+                    getEl('weatherPressure') && (getEl('weatherPressure').textContent = '-- гПа');
+                    getEl('weatherVisibility') && (getEl('weatherVisibility').textContent = '-- км');
+                    getEl('weatherIcon') && (getEl('weatherIcon').textContent = '❌');
+                },
+                
+                _showLoader(show) {
+                    const loader = document.getElementById('weatherLoader');
+                    if (loader) loader.style.display = show ? 'inline-block' : 'none';
+                },
+                
+                _loadLastWeather() {
+                    const lastCity = Storage.load(CONFIG.STORAGE_KEYS.LAST_CITY);
+                    const lastData = Storage.load(CONFIG.STORAGE_KEYS.LAST_DATA);
+                    
+                    if (lastData) {
+                        this._updateUI(lastData);
+                    } else if (lastCity) {
+                        this.fetchWeather(lastCity).catch(() => this.fetchWeather('Москва'));
                     } else {
-                        addConsoleOutput('error', 'Использование: calc [выражение]');
+                        this.fetchWeather('Москва');
                     }
                 }
             };
             
-            // Проверка команд с аргументами
-            if (cmd.startsWith('echo ')) {
-                commands.echo();
-            } else if (cmd.startsWith('calc ')) {
-                commands.calc();
-            } else if (commands[cmd]) {
-                commands[cmd]();
-            } else {
-                addConsoleOutput('error', `Команда "${command}" не найдена. Введите "help" для списка команд.`);
-            }
-        }
-        
-        // ========== ФУНКЦИИ САЙТА ==========
-        
-        // Функция для скачивания резюме
-        function downloadCV() {
-            // Создаем PDF-контент
-            const cvContent = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Резюме - Active Developer</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            margin: 40px;
-                            color: #333;
-                        }
-                        .header {
-                            text-align: center;
-                            margin-bottom: 30px;
-                            border-bottom: 2px solid #00d9ff;
-                            padding-bottom: 20px;
-                        }
-                        .header h1 {
-                            color: #00d9ff;
-                            font-size: 32px;
-                            margin-bottom: 5px;
-                        }
-                        .header h2 {
-                            color: #666;
-                            font-size: 18px;
-                            font-weight: normal;
-                        }
-                        .section {
-                            margin-bottom: 25px;
-                        }
-                        .section-title {
-                            color: #8a2be2;
-                            border-left: 4px solid #00d9ff;
-                            padding-left: 10px;
-                            margin-bottom: 15px;
-                            font-size: 20px;
-                        }
-                        .contact-info {
-                            display: grid;
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 10px;
-                            margin-bottom: 20px;
-                        }
-                        .contact-item {
-                            padding: 8px;
-                            background: #f5f5f5;
-                            border-radius: 5px;
-                        }
-                        .skills-grid {
-                            display: grid;
-                            grid-template-columns: repeat(3, 1fr);
-                            gap: 10px;
-                        }
-                        .skill-item {
-                            background: #e6f7ff;
-                            padding: 10px;
-                            border-radius: 5px;
-                            text-align: center;
-                        }
-                        .project {
-                            margin-bottom: 15px;
-                            padding: 15px;
-                            background: #f9f9f9;
-                            border-radius: 8px;
-                        }
-                        .project-title {
-                            font-weight: bold;
-                            color: #333;
-                            margin-bottom: 5px;
-                        }
-                        .stats {
-                            display: grid;
-                            grid-template-columns: repeat(2, 1fr);
-                            gap: 15px;
-                            text-align: center;
-                        }
-                        .stat-item {
-                            padding: 15px;
-                            background: #f0f8ff;
-                            border-radius: 8px;
-                        }
-                        .stat-number {
-                            font-size: 24px;
-                            color: #00d9ff;
-                            font-weight: bold;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h1>Active Developer</h1>
-                        <h2>Разработчик • Спортсмен • 16 лет</h2>
-                    </div>
+            const Console = {
+                init() {
+                    const input = document.getElementById('consoleInput');
+                    State.consoleHistory = Storage.load(CONFIG.STORAGE_KEYS.CONSOLE_HISTORY) || [];
                     
-                    <div class="section">
-                        <div class="section-title">Контакты</div>
-                        <div class="contact-info">
-                            <div class="contact-item">
-                                <strong>WhatsApp:</strong> +7 (906) 448-28-98
-                            </div>
-                            <div class="contact-item">
-                                <strong>Telegram:</strong> @Sexy_Killed
-                            </div>
-                            <div class="contact-item">
-                                <strong>GitHub:</strong> killedofficialbd-sys
-                            </div>
-                            <div class="contact-item">
-                                <strong>Spotify:</strong> Active Developer
-                            </div>
-                        </div>
-                    </div>
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            if (State.consoleHistory.length > 0) {
+                                State.consoleHistoryIndex = Math.min(State.consoleHistoryIndex + 1, State.consoleHistory.length - 1);
+                                input.value = State.consoleHistory[State.consoleHistoryIndex] || '';
+                            }
+                        } else if (e.key === 'ArrowDown') {
+                            e.preventDefault();
+                            if (State.consoleHistory.length > 0) {
+                                State.consoleHistoryIndex = Math.max(State.consoleHistoryIndex - 1, -1);
+                                input.value = State.consoleHistoryIndex >= 0 ? State.consoleHistory[State.consoleHistoryIndex] : '';
+                            }
+                        } else if (e.key === 'Enter') {
+                            this.handleCommand();
+                        }
+                    });
+                },
+                
+                handleCommand() {
+                    const input = document.getElementById('consoleInput');
+                    const command = input.value.trim();
                     
-                    <div class="section">
-                        <div class="section-title">Обо мне</div>
-                        <p>16-летний разработчик с страстью к созданию инновационных веб-приложений. Занимаюсь программированием более года, постоянно изучаю новые технологии. В свободное время тренируюсь, слушаю музыку и работаю над персональными проектами. Верю в силу саморазвития и всегда открыт для новых вызовов.</p>
-                    </div>
+                    if (!command) return;
                     
-                    <div class="section">
-                        <div class="section-title">Статистика</div>
-                        <div class="stats">
-                            <div class="stat-item">
-                                <div class="stat-number">365+</div>
-                                <div>Дней кодинга</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">15+</div>
-                                <div>Проектов</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">300+</div>
-                                <div>Коммитов</div>
-                            </div>
-                            <div class="stat-item">
-                                <div class="stat-number">7/7</div>
-                                <div>Дней тренировок</div>
-                            </div>
-                        </div>
-                    </div>
+                    this.addOutput('command', `backend@server:~$ ${command}`);
+                    this.processCommand(command);
                     
-                    <div class="section">
-                        <div class="section-title">Навыки</div>
-                        <div class="skills-grid">
-                            <div class="skill-item">HTML5/CSS3</div>
-                            <div class="skill-item">JavaScript</div>
-                            <div class="skill-item">React/Vue.js</div>
-                            <div class="skill-item">Node.js</div>
-                            <div class="skill-item">Python</div>
-                            <div class="skill-item">MongoDB/MySQL</div>
-                            <div class="skill-item">Git/GitHub</div>
-                            <div class="skill-item">VS Code</div>
-                            <div class="skill-item">Figma</div>
-                        </div>
-                    </div>
+                    State.consoleHistory.unshift(command);
+                    State.consoleHistory = State.consoleHistory.slice(0, 50);
+                    Storage.save(CONFIG.STORAGE_KEYS.CONSOLE_HISTORY, State.consoleHistory);
+                    State.consoleHistoryIndex = -1;
+                    State.consoleCommandsCount++;
                     
-                    <div class="section">
-                        <div class="section-title">Проекты</div>
-                        <div class="project">
-                            <div class="project-title">Портфолио</div>
-                            <p>Современное портфолио с интерактивными элементами и анимациями</p>
-                            <p><strong>Технологии:</strong> HTML5, CSS3, JavaScript</p>
-                        </div>
-                        <div class="project">
-                            <div class="project-title">Автоматизация задач</div>
-                            <p>Скрипты для автоматизации рутинных задач и обработки данных</p>
-                            <p><strong>Технологии:</strong> Python, Bash</p>
-                        </div>
-                    </div>
+                    input.value = '';
+                },
+                
+                addOutput(type, message) {
+                    const output = document.getElementById('consoleOutput');
+                    const line = document.createElement('div');
+                    line.className = `console-line ${type}`;
+                    line.textContent = message;
+                    output.appendChild(line);
                     
-                    <div class="section">
-                        <div class="section-title">Интересы</div>
-                        <div class="skills-grid">
-                            <div class="skill-item">Веб-разработка</div>
-                            <div class="skill-item">Спорт</div>
-                            <div class="skill-item">Музыка</div>
-                            <div class="skill-item">Гейминг</div>
-                            <div class="skill-item">Технологии</div>
-                            <div class="skill-item">Саморазвитие</div>
-                        </div>
-                    </div>
+                    const consoleContent = document.getElementById('consoleContent');
+                    consoleContent.scrollTop = consoleContent.scrollHeight;
+                },
+                
+                async processCommand(command) {
+                    const cmd = command.toLowerCase().trim();
                     
-                    <div class="section">
-                        <div class="section-title">Любимые виды спорта</div>
-                        <p>Футбол, Баскетбол, Тренажерный зал, Бег, Плавание, Единоборства</p>
-                    </div>
-                    
-                    <div class="section">
-                        <div class="section-title">Музыкальные предпочтения</div>
-                        <p>Бассы, Фонк</p>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            // Создаем Blob из HTML
-            const blob = new Blob([cvContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            // Создаем ссылку для скачивания
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = 'Active_Developer_Resume.html';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            // Очищаем URL
-            URL.revokeObjectURL(url);
-            
-            // Показываем уведомление
-            showNotification('Резюме скачивается...', 'success');
-        }
-        
-        // Функция для показа уведомлений
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // Анимация появления
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-            
-            // Удаление через 3 секунды
-            setTimeout(() => {
-                notification.style.transform = 'translateX(150%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-        
-        // Переключение темы
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('click', function() {
-            document.body.classList.toggle('light-theme');
-            
-            if (document.body.classList.contains('light-theme')) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                document.documentElement.style.setProperty('--dark-bg', '#f0f2f5');
-                document.documentElement.style.setProperty('--darker-bg', '#ffffff');
-                document.documentElement.style.setProperty('--card-bg', 'rgba(255, 255, 255, 0.9)');
-                document.documentElement.style.setProperty('--text', '#333333');
-                document.documentElement.style.setProperty('--text-secondary', '#666666');
-                document.documentElement.style.setProperty('--glass', 'rgba(0, 0, 0, 0.05)');
-                document.documentElement.style.setProperty('--glass-border', 'rgba(0, 0, 0, 0.1)');
-                document.documentElement.style.setProperty('--console-bg', 'rgba(240, 242, 245, 0.95)');
-                addConsoleOutput('info', 'Тема изменена на светлую');
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                document.documentElement.style.setProperty('--dark-bg', '#0a0a14');
-                document.documentElement.style.setProperty('--darker-bg', '#070710');
-                document.documentElement.style.setProperty('--card-bg', 'rgba(20, 25, 40, 0.8)');
-                document.documentElement.style.setProperty('--text', '#ffffff');
-                document.documentElement.style.setProperty('--text-secondary', '#b0b0c0');
-                document.documentElement.style.setProperty('--glass', 'rgba(255, 255, 255, 0.05)');
-                document.documentElement.style.setProperty('--glass-border', 'rgba(255, 255, 255, 0.1)');
-                document.documentElement.style.setProperty('--console-bg', 'rgba(10, 10, 20, 0.95)');
-                addConsoleOutput('info', 'Тема изменена на темную');
-            }
-        });
-        
-        // Модальное окно проекта
-        function openProjectModal(projectId) {
-            const modal = document.getElementById('projectModal');
-            const overlay = document.getElementById('projectModalOverlay');
-            const title = document.getElementById('modalTitle');
-            const content = document.getElementById('modalContent');
-            
-            if (projectId === 'portfolio') {
-                title.textContent = 'Портфолио';
-                content.innerHTML = `
-                    <h3>Описание проекта</h3>
-                    <p>Современное веб-портфолио с интерактивными элементами, анимациями и адаптивным дизайном.</p>
-                    
-                    <h3>Технологии</h3>
-                    <ul>
-                        <li>HTML5</li>
-                        <li>CSS3 с Flexbox/Grid</li>
-                        <li>JavaScript (ES6+)</li>
-                        <li>Анимации CSS</li>
-                        <li>Адаптивный дизайн</li>
-                    </ul>
-                    
-                    <h3>Особенности</h3>
-                    <ul>
-                        <li>Интерактивная консоль разработчика</li>
-                        <li>Анимации при скролле</li>
-                        <li>Темная/светлая тема</li>
-                        <li>Оптимизация производительности</li>
-                    </ul>
-                    
-                    <div style="margin-top: 20px; text-align: center;">
-                        <button class="spotify-btn" onclick="window.open('https://github.com/killedofficialbd-sys/Active-developer', '_blank')">
-                            <i class="fab fa-github"></i> Исходный код
-                        </button>
-                    </div>
-                `;
-            } else if (projectId === 'automation') {
-                title.textContent = 'Автоматизация задач';
-                content.innerHTML = `
-                    <h3>Описание проекта</h3>
-                    <p>Набор скриптов для автоматизации рутинных задач и обработки данных.</p>
-                    
-                    <h3>Технологии</h3>
-                    <ul>
-                        <li>Python 3</li>
-                        <li>Bash</li>
-                        <li>Скрипты для автоматизации</li>
-                        <li>Работа с файлами и API</li>
-                    </ul>
-                    
-                    <h3>Примеры задач</h3>
-                    <ul>
-                        <li>Автоматическая обработка изображений</li>
-                        <li>Парсинг веб-страниц</li>
-                        <li>Резервное копирование файлов</li>
-                        <li>Автоматизация отправки отчетов</li>
-                    </ul>
-                    
-                    <h3>Особенности</h3>
-                    <ul>
-                        <li>Кросс-платформенность</li>
-                        <li>Модульная архитектура</li>
-                        <li>Логирование ошибок</li>
-                        <li>Конфигурационные файлы</li>
-                    </ul>
-                `;
-            }
-            
-            modal.classList.add('active');
-            overlay.classList.add('active');
-        }
-        
-        function closeProjectModal() {
-            document.getElementById('projectModal').classList.remove('active');
-            document.getElementById('projectModalOverlay').classList.remove('active');
-        }
-        
-        // Вибрация при кликах
-        document.querySelectorAll('.action-btn, .badge, .download-cv-btn, .project-card').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (navigator.vibrate) {
-                    navigator.vibrate(50);
+                    if (cmd.startsWith('weather ')) {
+                        const city = command.substring(8).trim();
+                        if (city) {
+                            this.addOutput('info', `🌍 Запрос погоды для: ${city}...`);
+                            try {
+                                await Weather.fetchWeather(city);
+                                this.addOutput('success', `✅ Погода для ${city} загружена`);
+                            } catch (error) {
+                                this.addOutput('error', `❌ ${error.message}`);
+                            }
+                        } else {
+                            this.addOutput('error', '❌ Использование: weather [город]');
+                        }
+                    } else if (cmd === 'help') {
+                        this.addOutput('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                        this.addOutput('system', '📋 ДОСТУПНЫЕ КОМАНДЫ:');
+                        this.addOutput('system', '  weather [город]    - получить погоду');
+                        this.addOutput('system', '  location           - определить по геолокации');
+                        this.addOutput('system', '  help               - показать помощь');
+                        this.addOutput('system', '  clear              - очистить консоль');
+                        this.addOutput('system', '  theme              - сменить тему');
+                        this.addOutput('system', '  time               - текущее время');
+                        this.addOutput('system', '  date               - текущая дата');
+                        this.addOutput('system', '  stats              - статистика');
+                        this.addOutput('system', '  cv                 - скачать резюме');
+                        this.addOutput('system', '  github/telegram/   - соц. сети');
+                        this.addOutput('system', '  whatsapp/spotify   ');
+                        this.addOutput('system', '  joke               - случайная шутка');
+                        this.addOutput('system', '  echo [текст]       - повторить текст');
+                        this.addOutput('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+                    } else if (cmd === 'clear') {
+                        document.getElementById('consoleOutput').innerHTML = '';
+                        this.addOutput('system', 'Консоль очищена');
+                    } else if (cmd === 'theme') {
+                        document.getElementById('themeToggle').click();
+                    } else if (cmd === 'time') {
+                        this.addOutput('info', `🕐 ${new Date().toLocaleTimeString('ru-RU')}`);
+                    } else if (cmd === 'date') {
+                        this.addOutput('info', `📅 ${new Date().toLocaleDateString('ru-RU', { 
+                            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                        })}`);
+                    } else if (cmd === 'stats') {
+                        this.addOutput('info', '📊 СТАТИСТИКА:');
+                        this.addOutput('system', `🔹 Команд выполнено: ${State.consoleCommandsCount}`);
+                        this.addOutput('system', `🔹 В истории команд: ${State.consoleHistory.length}`);
+                        this.addOutput('system', `🔹 Тема: ${document.body.classList.contains('light-theme') ? 'Светлая' : 'Темная'}`);
+                    } else if (cmd === 'location' || cmd === 'geo') {
+                        Weather.getUserLocation();
+                        this.addOutput('info', '📍 Запрос геолокации...');
+                    } else if (cmd === 'cv' || cmd === 'resume') {
+                        UI.downloadCV();
+                        this.addOutput('success', '✅ Скачивание резюме...');
+                    } else if (cmd.startsWith('echo ')) {
+                        this.addOutput('info', command.substring(5));
+                    } else if (cmd === 'github') {
+                        window.open('https://github.com/killedofficialbd-sys', '_blank', 'noopener noreferrer');
+                        this.addOutput('info', '🐙 Открываю GitHub...');
+                    } else if (cmd === 'telegram') {
+                        window.open('https://t.me/Sexy_Killed', '_blank', 'noopener noreferrer');
+                        this.addOutput('info', '✈️ Открываю Telegram...');
+                    } else if (cmd === 'whatsapp') {
+                        window.open('https://wa.me/79064482898', '_blank', 'noopener noreferrer');
+                        this.addOutput('info', '📱 Открываю WhatsApp...');
+                    } else if (cmd === 'spotify') {
+                        window.open('https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi', '_blank', 'noopener noreferrer');
+                        this.addOutput('info', '🎵 Открываю Spotify...');
+                    } else if (cmd === 'joke') {
+                        const jokes = [
+                            'Почему бэкенд-разработчик не любит ходить на пляж? Там слишком много фронтенда! 🏖️',
+                            'Что говорит сервер, когда устал? "Я перегрелся, дайте отдохнуть!" 🔥',
+                            'Сколько бэкенд-разработчиков нужно, чтобы починить лампочку? Ни одного, это проблема фронтенда! 💡',
+                            'Почему Python не любит зиму? Потому что он Python, а не Pycold! 🐍'
+                        ];
+                        this.addOutput('info', `🎭 ${jokes[Math.floor(Math.random() * jokes.length)]}`);
+                    } else if (cmd) {
+                        this.addOutput('error', `❌ Команда "${command}" не найдена`);
+                        this.addOutput('system', 'Введите "help" для списка команд');
+                    }
                 }
-            });
-        });
-        
-        // Горячие клавиши
-        document.addEventListener('keydown', function(e) {
-            // Ctrl+` для открытия консоли
-            if (e.ctrlKey && e.key === '`') {
-                e.preventDefault();
-                openConsole();
-            }
+            };
             
-            // Esc для закрытия окон
-            if (e.key === 'Escape') {
-                closeConsole();
-                closeProjectModal();
-            }
+            const UI = {
+                init() {
+                    this._initTheme();
+                    this._initTypewriter();
+                    this._initEventListeners();
+                    
+                    setTimeout(() => {
+                        const lastData = Storage.load(CONFIG.STORAGE_KEYS.LAST_DATA);
+                        if (lastData) {
+                            Weather._updateUI(lastData);
+                        } else {
+                            Weather.fetchWeather('Москва');
+                        }
+                        
+                        setTimeout(() => Weather.getUserLocation(), 2000);
+                    }, 100);
+                    
+                    Console.init();
+                },
+                
+                _initTheme() {
+                    const savedTheme = Storage.load(CONFIG.STORAGE_KEYS.THEME, 86400000);
+                    if (savedTheme === 'light') {
+                        document.body.classList.add('light-theme');
+                        document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+                    }
+                },
+                
+                _initTypewriter() {
+                    const texts = ['Backend Developer', 'API Architect', 'Database Engineer', 'Server Administrator', '16 y.o. Code Wizard'];
+                    let textIndex = 0, charIndex = 0;
+                    const typewriter = document.getElementById('typewriter');
+                    
+                    const type = () => {
+                        if (charIndex < texts[textIndex].length) {
+                            typewriter.innerHTML = texts[textIndex].substring(0, charIndex + 1);
+                            charIndex++;
+                            setTimeout(type, 100);
+                        } else {
+                            setTimeout(erase, 2000);
+                        }
+                    };
+                    
+                    const erase = () => {
+                        if (charIndex > 0) {
+                            typewriter.innerHTML = texts[textIndex].substring(0, charIndex - 1);
+                            charIndex--;
+                            setTimeout(erase, 50);
+                        } else {
+                            textIndex = (textIndex + 1) % texts.length;
+                            setTimeout(type, 500);
+                        }
+                    };
+                    
+                    setTimeout(type, 1000);
+                },
+                
+                _initEventListeners() {
+                    document.getElementById('themeToggle').addEventListener('click', () => {
+                        document.body.classList.toggle('light-theme');
+                        const isLight = document.body.classList.contains('light-theme');
+                        document.getElementById('themeToggle').innerHTML = isLight ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+                        Storage.save(CONFIG.STORAGE_KEYS.THEME, isLight ? 'light' : 'dark');
+                        Notifications.show(`Тема: ${isLight ? 'Светлая' : 'Темная'}`, 'info');
+                    });
+                    
+                    document.getElementById('consoleToggleBtn').addEventListener('click', () => this.openConsole());
+                    document.getElementById('consoleOverlay').addEventListener('click', () => this.closeConsole());
+                    document.getElementById('closeConsole').addEventListener('click', () => this.closeConsole());
+                    document.getElementById('minimizeConsole').addEventListener('click', () => this.minimizeConsole());
+                    document.getElementById('maximizeConsole').addEventListener('click', () => this.maximizeConsole());
+                    
+                    document.getElementById('geolocationBtn').addEventListener('click', () => Weather.getUserLocation());
+                    document.getElementById('downloadCVBtn').addEventListener('click', () => this.downloadCV());
+                    document.getElementById('closeModalBtn').addEventListener('click', () => this.closeProjectModal());
+                    document.getElementById('projectModalOverlay').addEventListener('click', () => this.closeProjectModal());
+                    
+                    document.querySelectorAll('.project-card').forEach(card => {
+                        card.addEventListener('click', () => this.openProjectModal(card.dataset.project));
+                    });
+                    
+                    const observer = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.style.opacity = 1;
+                                entry.target.style.transform = 'translateY(0)';
+                            }
+                        });
+                    }, { threshold: 0.1 });
+                    
+                    document.querySelectorAll('.card').forEach(card => observer.observe(card));
+                    
+                    document.addEventListener('keydown', (e) => {
+                        if (e.ctrlKey && e.key === '`') {
+                            e.preventDefault();
+                            document.getElementById('consoleWindow').classList.contains('active') ? this.closeConsole() : this.openConsole();
+                        }
+                        if (e.ctrlKey && e.key === 't') {
+                            e.preventDefault();
+                            document.getElementById('themeToggle').click();
+                        }
+                        if (e.key === 'Escape') {
+                            this.closeConsole();
+                            this.closeProjectModal();
+                        }
+                    });
+                },
+                
+                openConsole() {
+                    document.getElementById('consoleWindow').classList.add('active');
+                    document.getElementById('consoleOverlay').classList.add('active');
+                    document.getElementById('consoleInput').focus();
+                    Console.addOutput('success', '🟢 Сервер консоли активирован');
+                },
+                
+                closeConsole() {
+                    document.getElementById('consoleWindow').classList.remove('active', 'maximized');
+                    document.getElementById('consoleOverlay').classList.remove('active');
+                    State.isConsoleMaximized = false;
+                },
+                
+                minimizeConsole() {
+                    this.closeConsole();
+                    Notifications.show('Консоль свернута', 'info');
+                },
+                
+                maximizeConsole() {
+                    const consoleWindow = document.getElementById('consoleWindow');
+                    consoleWindow.classList.toggle('maximized');
+                    State.isConsoleMaximized = consoleWindow.classList.contains('maximized');
+                },
+                
+                openProjectModal(projectId) {
+                    const modal = document.getElementById('projectModal');
+                    const overlay = document.getElementById('projectModalOverlay');
+                    const title = document.getElementById('modalTitle');
+                    const content = document.getElementById('modalContent');
+                    
+                    const projects = {
+                        'api-gateway': {
+                            title: 'API Gateway',
+                            content: `
+                                <h3 style="color: var(--primary);">Описание проекта</h3>
+                                <p>Микросервисная архитектура с балансировкой нагрузки и JWT аутентификацией.</p>
+                                <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
+                                <ul style="margin-left: 20px;">
+                                    <li>Node.js + Express</li>
+                                    <li>Redis для кэширования</li>
+                                    <li>JWT токены</li>
+                                    <li>Nginx reverse proxy</li>
+                                </ul>
+                            `
+                        },
+                        'telegram-bot': {
+                            title: 'Telegram Bot API',
+                            content: `
+                                <h3 style="color: var(--primary);">Описание проекта</h3>
+                                <p>Многофункциональный Telegram бот с базой данных MongoDB.</p>
+                                <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
+                                <ul style="margin-left: 20px;">
+                                    <li>Python + Aiogram 3.x</li>
+                                    <li>MongoDB Atlas</li>
+                                    <li>Docker контейнеризация</li>
+                                </ul>
+                            `
+                        },
+                        'auth-system': {
+                            title: 'Auth System',
+                            content: `
+                                <h3 style="color: var(--primary);">Описание проекта</h3>
+                                <p>Система аутентификации с JWT токенами и refresh механизмом.</p>
+                                <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
+                                <ul style="margin-left: 20px;">
+                                    <li>FastAPI</li>
+                                    <li>PostgreSQL + SQLAlchemy</li>
+                                    <li>JWT с RSA подписью</li>
+                                    <li>Docker + Docker Compose</li>
+                                </ul>
+                            `
+                        }
+                    };
+                    
+                    const project = projects[projectId] || projects['api-gateway'];
+                    title.textContent = project.title;
+                    content.innerHTML = project.content;
+                    
+                    modal.classList.add('active');
+                    overlay.classList.add('active');
+                },
+                
+                closeProjectModal() {
+                    document.getElementById('projectModal').classList.remove('active');
+                    document.getElementById('projectModalOverlay').classList.remove('active');
+                },
+                
+                downloadCV() {
+                    const content = `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Резюме - Backend Developer</title>
+                            <style>
+                                * { margin: 0; padding: 0; box-sizing: border-box; }
+                                body {
+                                    font-family: 'Courier New', monospace;
+                                    background: #0a0a14;
+                                    color: #00ff9d;
+                                    padding: 40px;
+                                    line-height: 1.6;
+                                }
+                                .container { max-width: 800px; margin: 0 auto; }
+                                h1 {
+                                    font-size: 48px;
+                                    margin-bottom: 10px;
+                                    background: linear-gradient(135deg, #00ff9d, #00b8ff);
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                }
+                                .section {
+                                    margin: 30px 0;
+                                    padding: 20px;
+                                    border: 1px solid #00ff9d;
+                                    border-radius: 10px;
+                                }
+                                .section-title { color: #00b8ff; margin-bottom: 15px; font-size: 24px; }
+                                .skill-tag {
+                                    display: inline-block;
+                                    padding: 5px 15px;
+                                    background: rgba(0, 255, 157, 0.1);
+                                    border: 1px solid #00ff9d;
+                                    border-radius: 20px;
+                                    margin: 5px;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="container">
+                                <h1>Backend Developer</h1>
+                                <h2 style="color: #fff;">16 лет • API Architect</h2>
+                                
+                                <div class="section">
+                                    <div class="section-title">📊 Контакты</div>
+                                    <div>Telegram: @Sexy_Killed</div>
+                                    <div>GitHub: killedofficialbd-sys</div>
+                                    <div>WhatsApp: +7 (906) 448-28-98</div>
+                                </div>
+                                
+                                <div class="section">
+                                    <div class="section-title">💻 Backend стек</div>
+                                    <div>
+                                        <span class="skill-tag">Node.js</span>
+                                        <span class="skill-tag">Python</span>
+                                        <span class="skill-tag">Express</span>
+                                        <span class="skill-tag">FastAPI</span>
+                                        <span class="skill-tag">MongoDB</span>
+                                        <span class="skill-tag">PostgreSQL</span>
+                                        <span class="skill-tag">Redis</span>
+                                        <span class="skill-tag">Docker</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="section">
+                                    <div class="section-title">🚀 Проекты</div>
+                                    <div style="margin-bottom: 15px;">
+                                        <h3 style="color: #00ff9d;">API Gateway</h3>
+                                        <p>Микросервисная архитектура с балансировкой нагрузки</p>
+                                    </div>
+                                    <div>
+                                        <h3 style="color: #00ff9d;">Telegram Bot API</h3>
+                                        <p>Многофункциональный бот с MongoDB</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </body>
+                        </html>
+                    `;
+                    
+                    const blob = new Blob([content], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = 'Backend_Developer_Resume.html';
+                    link.click();
+                    URL.revokeObjectURL(url);
+                    
+                    Notifications.show('Резюме скачивается...', 'success');
+                }
+            };
             
-            // Ctrl+T для переключения темы
-            if (e.ctrlKey && e.key === 't') {
-                e.preventDefault();
-                themeToggle.click();
-            }
-        });
+            window.App = { Weather, Console, UI, Notifications };
+            
+            document.addEventListener('DOMContentLoaded', () => UI.init());
+        })();
     </script>
 </body>
 </html>
