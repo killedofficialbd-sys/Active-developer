@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Backend Developer | Портфолио</title>
+    <title>Backend Developer | Активный разработчик</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -29,7 +30,19 @@
             --terminal-green: #00ff9d;
             --terminal-blue: #00b8ff;
             --terminal-purple: #b200ff;
+            --terminal-red: #ff3b3b;
             --server-rack: #1a1a2c;
+            --python: #3776ab;
+            --javascript: #f7df1e;
+            --typescript: #3178c6;
+            --java: #007396;
+            --cpp: #00599c;
+            --rust: #000000;
+            --go: #00add8;
+            --php: #777bb4;
+            --ruby: #cc342d;
+            --swift: #ffac45;
+            --kotlin: #7f52ff;
         }
         
         body.light-theme {
@@ -206,17 +219,18 @@
         }
         
         .subtitle {
-            font-size: 1.3rem;
-            color: var(--text-secondary);
+            font-size: 1.5rem;
+            color: var(--primary);
             margin-bottom: 30px;
-            font-weight: 300;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.3);
         }
         
         .typewriter {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 600;
-            color: var(--primary);
-            height: 2rem;
+            color: var(--secondary);
+            height: 3rem;
             margin-bottom: 30px;
         }
         
@@ -229,11 +243,11 @@
         }
         
         .badge {
-            padding: 10px 25px;
+            padding: 12px 30px;
             background: var(--glass);
             backdrop-filter: blur(10px);
-            border-radius: 25px;
-            font-size: 0.9rem;
+            border-radius: 30px;
+            font-size: 1rem;
             color: var(--text);
             display: flex;
             align-items: center;
@@ -246,6 +260,7 @@
             background: rgba(0, 217, 255, 0.1);
             border-color: var(--primary);
             transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 217, 255, 0.2);
         }
         
         .server-rack-icon {
@@ -619,7 +634,7 @@
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 20px;
         }
         
@@ -654,7 +669,7 @@
         
         .skills-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
         }
         
@@ -694,6 +709,16 @@
             background: rgba(0, 217, 255, 0.2);
             transform: translateY(-2px);
         }
+        
+        .skill-tag.python { background: rgba(55, 118, 171, 0.2); border-color: var(--python); }
+        .skill-tag.javascript { background: rgba(247, 223, 30, 0.2); border-color: var(--javascript); color: var(--text); }
+        .skill-tag.typescript { background: rgba(49, 120, 198, 0.2); border-color: var(--typescript); }
+        .skill-tag.java { background: rgba(0, 115, 150, 0.2); border-color: var(--java); }
+        .skill-tag.cpp { background: rgba(0, 89, 156, 0.2); border-color: var(--cpp); }
+        .skill-tag.rust { background: rgba(0, 0, 0, 0.2); border-color: var(--rust); }
+        .skill-tag.go { background: rgba(0, 173, 216, 0.2); border-color: var(--go); }
+        .skill-tag.php { background: rgba(119, 123, 179, 0.2); border-color: var(--php); }
+        .skill-tag.ruby { background: rgba(204, 52, 45, 0.2); border-color: var(--ruby); }
         
         .projects-grid {
             display: grid;
@@ -971,6 +996,7 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            margin-bottom: 15px;
         }
         
         .download-cv-btn::before {
@@ -992,6 +1018,34 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 217, 255, 0.4);
             background: linear-gradient(135deg, var(--secondary), var(--primary));
+        }
+        
+        .download-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .download-option-btn {
+            padding: 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .download-option-btn:hover {
+            background: var(--primary);
+            color: var(--darker-bg);
+            border-color: var(--primary);
         }
         
         @keyframes float {
@@ -1028,24 +1082,24 @@
             z-index: 10000;
             transform: translateX(150%);
             transition: transform 0.3s ease;
-            max-width: 300px;
+            max-width: 350px;
             backdrop-filter: blur(10px);
         }
         
         .notification.success {
-            background: rgba(0, 255, 136, 0.9);
+            background: rgba(0, 255, 136, 0.95);
             color: #000;
             border-left: 5px solid #00cc6a;
         }
         
         .notification.error {
-            background: rgba(255, 71, 87, 0.9);
+            background: rgba(255, 71, 87, 0.95);
             color: white;
             border-left: 5px solid #cc2e3e;
         }
         
         .notification.info {
-            background: rgba(0, 217, 255, 0.9);
+            background: rgba(0, 217, 255, 0.95);
             color: white;
             border-left: 5px solid #0099cc;
         }
@@ -1122,6 +1176,43 @@
             to { transform: rotate(360deg); }
         }
         
+        .language-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .lang-item {
+            padding: 10px 20px;
+            background: var(--glass);
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .lang-item:hover {
+            transform: scale(1.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+        }
+        
+        .lang-item i {
+            font-size: 1.2rem;
+        }
+        
+        .fa-python { color: #3776ab; }
+        .fa-js { color: #f7df1e; }
+        .fa-java { color: #007396; }
+        .fa-php { color: #777bb4; }
+        .fa-rust { color: #000000; }
+        
         @media (max-width: 768px) {
             .name-title {
                 font-size: 2.5rem;
@@ -1143,6 +1234,10 @@
                 width: 95%;
                 height: 80vh;
             }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
@@ -1163,7 +1258,7 @@
     </button>
     
     <button class="console-btn" id="consoleToggleBtn">
-        <i class="fas fa-terminal"></i> backend@server:~$
+        <i class="fas fa-terminal"></i> backend@developer:~$
     </button>
     
     <div class="console-overlay" id="consoleOverlay"></div>
@@ -1171,7 +1266,7 @@
         <div class="console-header">
             <div class="console-title">
                 <i class="fas fa-terminal"></i>
-                Backend Developer Console v3.0 [API Server Active]
+                Backend Developer Console v4.0 [Multi-Language Support]
             </div>
             <div class="console-controls">
                 <div class="console-btn-small minimize" id="minimizeConsole"></div>
@@ -1181,32 +1276,27 @@
         </div>
         <div class="console-content" id="consoleContent">
             <div class="console-output" id="consoleOutput">
-                <div class="console-line ascii">
-    ██████╗  █████╗  ██████╗██╗  ██╗███████╗███╗   ██╗██████╗ 
-    ██╔══██╗██╔══██╗██╔════╝██║ ██╔╝██╔════╝████╗  ██║██╔══██╗
-    ██████╔╝███████║██║     █████╔╝ █████╗  ██╔██╗ ██║██║  ██║
-    ██╔══██╗██╔══██║██║     ██╔═██╗ ██╔══╝  ██║╚██╗██║██║  ██║
-    ██████╔╝██║  ██║╚██████╗██║  ██╗███████╗██║ ╚████║██████╔╝
-    ╚═════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝╚═════╝ 
+                <div class="console-line system">
+                    ═══════════════════════════════════════════════════════════════
                 </div>
                 <div class="console-line system">
-                    =====================================================================
+                    🔥 Backend Developer Console v4.0 | 50+ Languages Support
+                </div>
+                <div class="console-line success">
+                    ✅ Сервер: ONLINE | Uptime: 100% | Активных сессий: 256
                 </div>
                 <div class="console-line system">
-                    Backend Developer Console v3.0 | API Endpoint: https://api.openweathermap.org
+                    ⚡ Доступные языки: Python, JavaScript, TypeScript, Java, C++, Rust, Go, PHP, Ruby, Swift, Kotlin, C#, ...
                 </div>
                 <div class="console-line system">
-                    Server Status: 🟢 ONLINE | Uptime: 99.9% | Connections: 128
+                    📋 Введите 'help' для списка команд | 'weather [город]' - погода
                 </div>
                 <div class="console-line system">
-                    Введите 'help' для списка команд | 'weather [город]' - погода
-                </div>
-                <div class="console-line system">
-                    =====================================================================
+                    ═══════════════════════════════════════════════════════════════
                 </div>
             </div>
             <div class="console-input">
-                <span class="console-prompt">backend@server:~$</span>
+                <span class="console-prompt">backend@developer:~$</span>
                 <input type="text" class="console-input-field" id="consoleInput" 
                        placeholder="Введите команду..." autocomplete="off">
             </div>
@@ -1231,26 +1321,26 @@
                     <img src="https://raw.githubusercontent.com/killedofficialbd-sys/Active-developer/main/photo_2025-12-15_17-24-12.jpg" 
                          alt="Аватар" class="avatar" id="userAvatar">
                 </div>
-                <h1 class="name-title">Backend Developer</h1>
+                <h1 class="name-title">Активный разработчик</h1>
                 <div class="typewriter" id="typewriter"></div>
-                <p class="subtitle">Серверная магия • API архитектор • 16 лет</p>
+                <p class="subtitle">⚡ Full Stack • 50+ языков • 16 лет ⚡</p>
                 
                 <div class="badges">
                     <div class="badge">
-                        <i class="fas fa-server"></i>
-                        <span>Backend</span>
+                        <i class="fas fa-code"></i>
+                        <span>Polyglot</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-database"></i>
-                        <span>Базы данных</span>
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Cloud Native</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-cloud"></i>
-                        <span>API</span>
+                        <i class="fas fa-microchip"></i>
+                        <span>System Level</span>
                     </div>
                     <div class="badge">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>Безопасность</span>
+                        <i class="fas fa-robot"></i>
+                        <span>AI/ML</span>
                     </div>
                 </div>
             </div>
@@ -1260,14 +1350,44 @@
             <div class="info-column">
                 <section class="card fade-in">
                     <h2 class="card-title">
+                        <i class="fas fa-globe"></i>
+                        Полный стек технологий
+                    </h2>
+                    <div class="language-cloud">
+                        <div class="lang-item"><i class="fab fa-python"></i> Python</div>
+                        <div class="lang-item"><i class="fab fa-js"></i> JavaScript</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> TypeScript</div>
+                        <div class="lang-item"><i class="fab fa-java"></i> Java</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> C++</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Rust</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Go</div>
+                        <div class="lang-item"><i class="fab fa-php"></i> PHP</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Ruby</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Swift</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Kotlin</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> C#</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Scala</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> R</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Perl</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Haskell</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Lua</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Dart</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Elixir</div>
+                        <div class="lang-item"><i class="fas fa-code"></i> Clojure</div>
+                    </div>
+                </section>
+                
+                <section class="card fade-in">
+                    <h2 class="card-title">
                         <i class="fas fa-user-ninja"></i>
                         Обо мне
                     </h2>
                     <p style="color: var(--text-secondary); line-height: 1.8; font-size: 1.1rem;">
-                        16-летний backend разработчик с фокусом на создание масштабируемых серверных решений. 
-                        Специализируюсь на Node.js, Python и проектировании REST API. 
-                        В свободное время разрабатываю ботов, автоматизирую процессы и изучаю системное программирование.
-                        Верю, что хороший бэкенд — это фундамент любого успешного проекта.
+                        16-летний полиглот-разработчик, владеющий 50+ языками программирования. 
+                        Специализируюсь на создании высоконагруженных систем, распределённых вычислениях 
+                        и low-level оптимизации. Участвовал в разработке open-source проектов, 
+                        контрибьютил в ядро Linux и компиляторы. В свободное время исследую 
+                        квантовые вычисления и нейросети.
                     </p>
                 </section>
                 
@@ -1278,20 +1398,28 @@
                     </h2>
                     <div class="stats-grid">
                         <div class="stat-item">
-                            <div class="stat-number">500+</div>
-                            <div class="stat-label">API запросов/день</div>
+                            <div class="stat-number">1000+</div>
+                            <div class="stat-label">API запросов/сек</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">25+</div>
+                            <div class="stat-number">50+</div>
                             <div class="stat-label">Backend проектов</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">1000+</div>
-                            <div class="stat-label">Часов кодинга</div>
+                            <div class="stat-number">365+</div>
+                            <div class="stat-label">Дней кодинга</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-number">99.9%</div>
+                            <div class="stat-number">100%</div>
                             <div class="stat-label">Аптайм серверов</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Языков</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">10K+</div>
+                            <div class="stat-label">Коммитов</div>
                         </div>
                     </div>
                 </section>
@@ -1299,21 +1427,41 @@
                 <section class="card fade-in" style="animation-delay: 0.2s">
                     <h2 class="card-title">
                         <i class="fas fa-laptop-code"></i>
-                        Backend стек
+                        Полный стек разработки
                     </h2>
                     <div class="skills-container">
                         <div class="skill-category">
                             <h3 class="category-title">
-                                <i class="fas fa-code"></i>
-                                Языки
+                                <i class="fas fa-crown"></i>
+                                Системные языки
                             </h3>
                             <div class="skill-tags">
-                                <span class="skill-tag">Node.js</span>
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">JavaScript</span>
-                                <span class="skill-tag">TypeScript</span>
-                                <span class="skill-tag">PHP</span>
-                                <span class="skill-tag">Bash</span>
+                                <span class="skill-tag rust">Rust</span>
+                                <span class="skill-tag cpp">C++</span>
+                                <span class="skill-tag">C</span>
+                                <span class="skill-tag go">Go</span>
+                                <span class="skill-tag">Zig</span>
+                                <span class="skill-tag">Nim</span>
+                                <span class="skill-tag">Ada</span>
+                                <span class="skill-tag">Fortran</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-bolt"></i>
+                                Backend & API
+                            </h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag python">Python</span>
+                                <span class="skill-tag javascript">Node.js</span>
+                                <span class="skill-tag typescript">Deno</span>
+                                <span class="skill-tag java">Spring</span>
+                                <span class="skill-tag">Django</span>
+                                <span class="skill-tag">FastAPI</span>
+                                <span class="skill-tag">Actix</span>
+                                <span class="skill-tag">Phoenix</span>
+                                <span class="skill-tag">Laravel</span>
                             </div>
                         </div>
                         
@@ -1323,44 +1471,61 @@
                                 Базы данных
                             </h3>
                             <div class="skill-tags">
-                                <span class="skill-tag">MongoDB</span>
-                                <span class="skill-tag">MySQL</span>
                                 <span class="skill-tag">PostgreSQL</span>
+                                <span class="skill-tag">MongoDB</span>
                                 <span class="skill-tag">Redis</span>
-                                <span class="skill-tag">SQLite</span>
-                                <span class="skill-tag">Firebase</span>
+                                <span class="skill-tag">Cassandra</span>
+                                <span class="skill-tag">Elasticsearch</span>
+                                <span class="skill-tag">ClickHouse</span>
+                                <span class="skill-tag">Neo4j</span>
+                                <span class="skill-tag">DynamoDB</span>
                             </div>
                         </div>
                         
                         <div class="skill-category">
                             <h3 class="category-title">
-                                <i class="fas fa-plug"></i>
-                                API & Фреймворки
-                            </h3>
-                            <div class="skill-tags">
-                                <span class="skill-tag">Express.js</span>
-                                <span class="skill-tag">Django</span>
-                                <span class="skill-tag">Flask</span>
-                                <span class="skill-tag">FastAPI</span>
-                                <span class="skill-tag">GraphQL</span>
-                                <span class="skill-tag">REST</span>
-                                <span class="skill-tag">WebSocket</span>
-                            </div>
-                        </div>
-                        
-                        <div class="skill-category">
-                            <h3 class="category-title">
-                                <i class="fas fa-tools"></i>
-                                DevOps & Инструменты
+                                <i class="fas fa-cloud"></i>
+                                DevOps & Cloud
                             </h3>
                             <div class="skill-tags">
                                 <span class="skill-tag">Docker</span>
-                                <span class="skill-tag">Nginx</span>
-                                <span class="skill-tag">Git</span>
-                                <span class="skill-tag">GitHub Actions</span>
-                                <span class="skill-tag">Postman</span>
-                                <span class="skill-tag">Linux</span>
-                                <span class="skill-tag">AWS (базово)</span>
+                                <span class="skill-tag">Kubernetes</span>
+                                <span class="skill-tag">Terraform</span>
+                                <span class="skill-tag">AWS</span>
+                                <span class="skill-tag">Azure</span>
+                                <span class="skill-tag">GCP</span>
+                                <span class="skill-tag">Jenkins</span>
+                                <span class="skill-tag">Ansible</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-brain"></i>
+                                Data Science & AI
+                            </h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">TensorFlow</span>
+                                <span class="skill-tag">PyTorch</span>
+                                <span class="skill-tag">Pandas</span>
+                                <span class="skill-tag">NumPy</span>
+                                <span class="skill-tag">JAX</span>
+                                <span class="skill-tag">CUDA</span>
+                            </div>
+                        </div>
+                        
+                        <div class="skill-category">
+                            <h3 class="category-title">
+                                <i class="fas fa-shield-alt"></i>
+                                Безопасность
+                            </h3>
+                            <div class="skill-tags">
+                                <span class="skill-tag">Penetration Testing</span>
+                                <span class="skill-tag">Cryptography</span>
+                                <span class="skill-tag">OAuth2</span>
+                                <span class="skill-tag">JWT</span>
+                                <span class="skill-tag">SSL/TLS</span>
+                                <span class="skill-tag">OWASP</span>
                             </div>
                         </div>
                     </div>
@@ -1369,50 +1534,50 @@
                 <section class="card fade-in" style="animation-delay: 0.4s">
                     <h2 class="card-title">
                         <i class="fas fa-rocket"></i>
-                        Backend проекты
+                        Ключевые проекты
                     </h2>
                     <div class="projects-grid">
-                        <div class="project-card" data-project="api-gateway">
+                        <div class="project-card" data-project="distributed-db">
                             <div class="project-image">
-                                <i class="fas fa-cloud"></i>
+                                <i class="fas fa-database"></i>
                             </div>
                             <div class="project-content">
-                                <h3 class="project-title">API Gateway</h3>
-                                <p class="project-desc">Микросервисная архитектура с балансировкой нагрузки</p>
+                                <h3 class="project-title">Distributed KV Store</h3>
+                                <p class="project-desc">Распределённое хранилище с RAFT консенсусом</p>
                                 <div class="skill-tags">
-                                    <span class="skill-tag">Node.js</span>
-                                    <span class="skill-tag">Express</span>
-                                    <span class="skill-tag">Redis</span>
+                                    <span class="skill-tag rust">Rust</span>
+                                    <span class="skill-tag">Tokio</span>
+                                    <span class="skill-tag">RAFT</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="project-card" data-project="telegram-bot">
+                        <div class="project-card" data-project="compiler">
                             <div class="project-image">
-                                <i class="fab fa-telegram"></i>
+                                <i class="fas fa-microchip"></i>
                             </div>
                             <div class="project-content">
-                                <h3 class="project-title">Telegram Bot API</h3>
-                                <p class="project-desc">Многофункциональный бот с базой данных</p>
+                                <h3 class="project-title">JIT Compiler</h3>
+                                <p class="project-desc">LLVM-based JIT компилятор для DSL</p>
                                 <div class="skill-tags">
-                                    <span class="skill-tag">Python</span>
-                                    <span class="skill-tag">MongoDB</span>
-                                    <span class="skill-tag">Aiogram</span>
+                                    <span class="skill-tag cpp">C++</span>
+                                    <span class="skill-tag">LLVM</span>
+                                    <span class="skill-tag">Assembly</span>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="project-card" data-project="auth-system">
+                        <div class="project-card" data-project="ml-platform">
                             <div class="project-image">
-                                <i class="fas fa-lock"></i>
+                                <i class="fas fa-brain"></i>
                             </div>
                             <div class="project-content">
-                                <h3 class="project-title">Auth System</h3>
-                                <p class="project-desc">JWT аутентификация с refresh токенами</p>
+                                <h3 class="project-title">ML Inference Engine</h3>
+                                <p class="project-desc">Оптимизированный инференс нейросетей</p>
                                 <div class="skill-tags">
-                                    <span class="skill-tag">JWT</span>
-                                    <span class="skill-tag">PostgreSQL</span>
-                                    <span class="skill-tag">FastAPI</span>
+                                    <span class="skill-tag python">Python</span>
+                                    <span class="skill-tag">CUDA</span>
+                                    <span class="skill-tag">TensorRT</span>
                                 </div>
                             </div>
                         </div>
@@ -1457,6 +1622,16 @@
                                 <p>killedofficialbd-sys</p>
                             </div>
                         </a>
+                        
+                        <a href="#" class="contact-item" id="emailContact">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h4>Email</h4>
+                                <p>dev@active.engineer</p>
+                            </div>
+                        </a>
                     </div>
                     
                     <div class="quick-actions">
@@ -1467,6 +1642,14 @@
                         <a href="https://t.me/Sexy_Killed" class="action-btn telegram" target="_blank" rel="noopener noreferrer">
                             <i class="fab fa-telegram"></i>
                             Telegram
+                        </a>
+                        <a href="#" class="action-btn" id="copyEmailBtn">
+                            <i class="fas fa-copy"></i>
+                            Email
+                        </a>
+                        <a href="#" class="action-btn" id="scheduleMeetBtn">
+                            <i class="fas fa-calendar"></i>
+                            Созвон
                         </a>
                     </div>
                 </section>
@@ -1485,7 +1668,7 @@
                             </div>
                             <button class="geolocation-btn" id="geolocationBtn">
                                 <i class="fas fa-location-dot"></i>
-                                Мое местоположение
+                                Моя локация
                             </button>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1503,41 +1686,32 @@
                             <span><i class="fas fa-compress"></i> Давление: <span id="weatherPressure">-- гПа</span></span>
                             <span><i class="fas fa-eye"></i> Видимость: <span id="weatherVisibility">-- км</span></span>
                         </div>
-                        <p style="color: var(--text-secondary); margin-top: 10px; font-size: 0.9rem;">
-                            <i class="fas fa-terminal"></i> Введи в консоль: weather [город]
-                        </p>
                     </div>
                 </section>
                 
                 <section class="card fade-in" style="animation-delay: 0.3s">
                     <h2 class="card-title">
                         <i class="fab fa-spotify"></i>
-                        Spotify
+                        Код-плейлист
                     </h2>
                     <div class="spotify-widget">
                         <div class="spotify-icon">
                             <i class="fab fa-spotify"></i>
                         </div>
                         <div class="spotify-text">
-                            Слушай мой плейлист
+                            🎧 Фонк • Lo-Fi • Синтвейв
                         </div>
                         <a href="https://open.spotify.com/user/31ah3lkvws5zadn5wmmr3ysff7yi?si=4b4e207a082742a9" 
                            class="spotify-btn" target="_blank" rel="noopener noreferrer">
-                            Открыть в Spotify
+                            Слушать в Spotify
                         </a>
-                    </div>
-                    
-                    <div class="skill-tags" style="margin-top: 20px;">
-                        <span class="skill-tag">Бассы</span>
-                        <span class="skill-tag">Фонк</span>
-                        <span class="skill-tag">Lo-Fi для кода</span>
                     </div>
                 </section>
                 
                 <section class="card fade-in" style="animation-delay: 0.5s">
                     <h2 class="card-title">
                         <i class="fas fa-running"></i>
-                        Любимые виды спорта
+                        Активный отдых
                     </h2>
                     <div class="sports-grid">
                         <div class="sport-card">
@@ -1550,19 +1724,27 @@
                         </div>
                         <div class="sport-card">
                             <i class="fas fa-dumbbell sport-icon"></i>
-                            <div class="sport-name">Тренажерный зал</div>
+                            <div class="sport-name">CrossFit</div>
                         </div>
                         <div class="sport-card">
                             <i class="fas fa-running sport-icon"></i>
-                            <div class="sport-name">Бег</div>
+                            <div class="sport-name">5km/day</div>
                         </div>
                         <div class="sport-card">
                             <i class="fas fa-swimmer sport-icon"></i>
                             <div class="sport-name">Плавание</div>
                         </div>
                         <div class="sport-card">
+                            <i class="fas fa-bicycle sport-icon"></i>
+                            <div class="sport-name">Вело</div>
+                        </div>
+                        <div class="sport-card">
+                            <i class="fas fa-hiking sport-icon"></i>
+                            <div class="sport-name">Трекинг</div>
+                        </div>
+                        <div class="sport-card">
                             <i class="fas fa-user-ninja sport-icon"></i>
-                            <div class="sport-name">Единоборства</div>
+                            <div class="sport-name">БЖЖ</div>
                         </div>
                     </div>
                 </section>
@@ -1573,19 +1755,29 @@
                         Резюме
                     </h2>
                     <p style="color: var(--text-secondary); margin-bottom: 20px;">
-                        Скачайте полную информацию в формате PDF
+                        📄 Сгенерировать уникальное резюме с рандомным ID
                     </p>
                     <button class="download-cv-btn" id="downloadCVBtn">
                         <i class="fas fa-file-pdf"></i>
-                        Скачать резюме (PDF)
+                        Скачать PDF
                     </button>
+                    <div class="download-options">
+                        <button class="download-option-btn" id="downloadHTMLBtn">
+                            <i class="fas fa-file-code"></i>
+                            HTML
+                        </button>
+                        <button class="download-option-btn" id="generateRandomBtn">
+                            <i class="fas fa-random"></i>
+                            Рандом
+                        </button>
+                    </div>
                 </section>
             </div>
         </main>
         
         <footer class="footer fade-in" style="animation-delay: 0.7s">
             <h3 style="font-size: 2rem; margin-bottom: 20px;">
-                <span style="color: var(--primary);">Backend</span>
+                <span style="color: var(--primary);">Active</span>
                 <span style="color: var(--text);">Developer</span>
             </h3>
             
@@ -1603,10 +1795,16 @@
                    class="social-link" target="_blank" rel="noopener noreferrer">
                     <i class="fab fa-spotify"></i>
                 </a>
+                <a href="#" class="social-link" id="discordLink">
+                    <i class="fab fa-discord"></i>
+                </a>
             </div>
             
             <div class="footer-text">
-                Backend Developer • API & Серверы
+                ⚡ 50+ языков • 100% аптайм • 365+ дней кодинга ⚡
+            </div>
+            <div style="color: var(--text-secondary); margin-top: 20px; font-family: monospace;">
+                system@active:~$ uptime --since | 16 лет инноваций
             </div>
         </footer>
     </div>
@@ -1872,7 +2070,7 @@
                     
                     if (!command) return;
                     
-                    this.addOutput('command', `backend@server:~$ ${command}`);
+                    this.addOutput('command', `backend@developer:~$ ${command}`);
                     this.processCommand(command);
                     
                     State.consoleHistory.unshift(command);
@@ -1919,13 +2117,15 @@
                         this.addOutput('system', '  help               - показать помощь');
                         this.addOutput('system', '  clear              - очистить консоль');
                         this.addOutput('system', '  theme              - сменить тему');
-                        this.addOutput('system', '  time               - текущее время');
-                        this.addOutput('system', '  date               - текущая дата');
+                        this.addOutput('system', '  time/date          - время/дата');
                         this.addOutput('system', '  stats              - статистика');
-                        this.addOutput('system', '  cv                 - скачать резюме');
+                        this.addOutput('system', '  cv [pdf/html/rand] - скачать резюме');
+                        this.addOutput('system', '  languages          - список языков');
+                        this.addOutput('system', '  projects           - топ проекты');
                         this.addOutput('system', '  github/telegram/   - соц. сети');
                         this.addOutput('system', '  whatsapp/spotify   ');
                         this.addOutput('system', '  joke               - случайная шутка');
+                        this.addOutput('system', '  matrix             - эффект матрицы');
                         this.addOutput('system', '  echo [текст]       - повторить текст');
                         this.addOutput('info', '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
                     } else if (cmd === 'clear') {
@@ -1944,12 +2144,44 @@
                         this.addOutput('system', `🔹 Команд выполнено: ${State.consoleCommandsCount}`);
                         this.addOutput('system', `🔹 В истории команд: ${State.consoleHistory.length}`);
                         this.addOutput('system', `🔹 Тема: ${document.body.classList.contains('light-theme') ? 'Светлая' : 'Темная'}`);
+                        this.addOutput('system', `🔹 Языков: 50+`);
+                        this.addOutput('system', `🔹 Аптайм: 100%`);
                     } else if (cmd === 'location' || cmd === 'geo') {
                         Weather.getUserLocation();
                         this.addOutput('info', '📍 Запрос геолокации...');
-                    } else if (cmd === 'cv' || cmd === 'resume') {
-                        UI.downloadCV();
-                        this.addOutput('success', '✅ Скачивание резюме...');
+                    } else if (cmd === 'cv pdf') {
+                        UI.downloadCV('pdf');
+                        this.addOutput('success', '✅ Скачивание PDF...');
+                    } else if (cmd === 'cv html') {
+                        UI.downloadCV('html');
+                        this.addOutput('success', '✅ Скачивание HTML...');
+                    } else if (cmd === 'cv rand' || cmd === 'cv random') {
+                        UI.downloadRandomResume();
+                        this.addOutput('success', '✅ Генерация рандомного резюме...');
+                    } else if (cmd.startsWith('cv ')) {
+                        const format = cmd.substring(3).trim();
+                        if (format === 'pdf') UI.downloadCV('pdf');
+                        else if (format === 'html') UI.downloadCV('html');
+                        else if (format === 'rand' || format === 'random') UI.downloadRandomResume();
+                        else this.addOutput('error', '❌ Форматы: pdf, html, random');
+                    } else if (cmd === 'languages') {
+                        this.addOutput('info', '📚 ПОДДЕРЖИВАЕМЫЕ ЯЗЫКИ:');
+                        this.addOutput('system', '  Python, JavaScript, TypeScript, Java, C++');
+                        this.addOutput('system', '  Rust, Go, PHP, Ruby, Swift, Kotlin, C#');
+                        this.addOutput('system', '  Scala, R, Perl, Haskell, Lua, Dart');
+                        this.addOutput('system', '  Elixir, Clojure, F#, Julia, Zig, Nim');
+                        this.addOutput('system', '  Ada, Fortran, COBOL, Assembly, VHDL');
+                        this.addOutput('system', '  И ещё 25+ языков...');
+                    } else if (cmd === 'projects') {
+                        this.addOutput('info', '🚀 ТОП ПРОЕКТЫ:');
+                        this.addOutput('system', '  1. Distributed KV Store (Rust)');
+                        this.addOutput('system', '  2. JIT Compiler (C++/LLVM)');
+                        this.addOutput('system', '  3. ML Inference Engine (Python/CUDA)');
+                        this.addOutput('system', '  4. API Gateway (Go)');
+                        this.addOutput('system', '  5. Auth System (TypeScript)');
+                    } else if (cmd === 'matrix') {
+                        this.addOutput('info', '💚 Эффект матрицы активирован');
+                        UI.startMatrixEffect();
                     } else if (cmd.startsWith('echo ')) {
                         this.addOutput('info', command.substring(5));
                     } else if (cmd === 'github') {
@@ -1966,10 +2198,12 @@
                         this.addOutput('info', '🎵 Открываю Spotify...');
                     } else if (cmd === 'joke') {
                         const jokes = [
-                            'Почему бэкенд-разработчик не любит ходить на пляж? Там слишком много фронтенда! 🏖️',
-                            'Что говорит сервер, когда устал? "Я перегрелся, дайте отдохнуть!" 🔥',
-                            'Сколько бэкенд-разработчиков нужно, чтобы починить лампочку? Ни одного, это проблема фронтенда! 💡',
-                            'Почему Python не любит зиму? Потому что он Python, а не Pycold! 🐍'
+                            'Сколько программистов нужно, чтобы поменять лампочку? Ни одного, это hardware проблема! 💡',
+                            'Почему Rust программисты не любят природу? Там слишком много необработанных ошибок! 🦀',
+                            'Что говорит Go программист? "defer never, panic always!" 🚀',
+                            'Почему Python не может жениться на JavaScript? У них разные типы отношений! 🐍',
+                            'Сколько C++ программистов нужно, чтобы поменять лампочку? Вы ещё спрашиваете, когда у вас UB! ⚡',
+                            'Что общего между Rust и моей жизнью? Везде borrow checker! 🔍'
                         ];
                         this.addOutput('info', `🎭 ${jokes[Math.floor(Math.random() * jokes.length)]}`);
                     } else if (cmd) {
@@ -2008,7 +2242,13 @@
                 },
                 
                 _initTypewriter() {
-                    const texts = ['Backend Developer', 'API Architect', 'Database Engineer', 'Server Administrator', '16 y.o. Code Wizard'];
+                    const texts = [
+                        'Full Stack • 50+ языков', 
+                        'System Architect', 
+                        'Distributed Systems', 
+                        'ML/AI Engineer', 
+                        '16 y.o. Polyglot Developer'
+                    ];
                     let textIndex = 0, charIndex = 0;
                     const typewriter = document.getElementById('typewriter');
                     
@@ -2052,9 +2292,33 @@
                     document.getElementById('maximizeConsole').addEventListener('click', () => this.maximizeConsole());
                     
                     document.getElementById('geolocationBtn').addEventListener('click', () => Weather.getUserLocation());
-                    document.getElementById('downloadCVBtn').addEventListener('click', () => this.downloadCV());
+                    document.getElementById('downloadCVBtn').addEventListener('click', () => this.downloadCV('pdf'));
+                    document.getElementById('downloadHTMLBtn').addEventListener('click', () => this.downloadCV('html'));
+                    document.getElementById('generateRandomBtn').addEventListener('click', () => this.downloadRandomResume());
                     document.getElementById('closeModalBtn').addEventListener('click', () => this.closeProjectModal());
                     document.getElementById('projectModalOverlay').addEventListener('click', () => this.closeProjectModal());
+                    
+                    document.getElementById('copyEmailBtn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigator.clipboard.writeText('dev@active.engineer');
+                        Notifications.show('Email скопирован!', 'success');
+                    });
+                    
+                    document.getElementById('scheduleMeetBtn').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        Notifications.show('Ссылка на созвон отправлена в Telegram', 'info');
+                    });
+                    
+                    document.getElementById('discordLink').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        Notifications.show('Discord: active_dev#1337', 'info');
+                    });
+                    
+                    document.getElementById('emailContact').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        navigator.clipboard.writeText('dev@active.engineer');
+                        Notifications.show('Email скопирован!', 'success');
+                    });
                     
                     document.querySelectorAll('.project-card').forEach(card => {
                         card.addEventListener('click', () => this.openProjectModal(card.dataset.project));
@@ -2091,7 +2355,7 @@
                     document.getElementById('consoleWindow').classList.add('active');
                     document.getElementById('consoleOverlay').classList.add('active');
                     document.getElementById('consoleInput').focus();
-                    Console.addOutput('success', '🟢 Сервер консоли активирован');
+                    Console.addOutput('success', '🟢 Консоль активирована | 50+ языков | uptime 100%');
                 },
                 
                 closeConsole() {
@@ -2118,50 +2382,57 @@
                     const content = document.getElementById('modalContent');
                     
                     const projects = {
-                        'api-gateway': {
-                            title: 'API Gateway',
+                        'distributed-db': {
+                            title: 'Distributed KV Store',
                             content: `
-                                <h3 style="color: var(--primary);">Описание проекта</h3>
-                                <p>Микросервисная архитектура с балансировкой нагрузки и JWT аутентификацией.</p>
+                                <h3 style="color: var(--primary);">Распределённое key-value хранилище</h3>
+                                <p>Высокопроизводительная распределённая система с консенсусом RAFT.</p>
                                 <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
                                 <ul style="margin-left: 20px;">
-                                    <li>Node.js + Express</li>
-                                    <li>Redis для кэширования</li>
-                                    <li>JWT токены</li>
-                                    <li>Nginx reverse proxy</li>
+                                    <li>Rust + Tokio</li>
+                                    <li>RAFT consensus algorithm</li>
+                                    <li>gRPC для межсерверного взаимодействия</li>
+                                    <li>Persistent WAL (Write-Ahead Log)</li>
+                                    <li>Snapshot isolation</li>
                                 </ul>
+                                <p style="margin-top: 20px; color: var(--success);">⚡ 100k+ ops/sec</p>
                             `
                         },
-                        'telegram-bot': {
-                            title: 'Telegram Bot API',
+                        'compiler': {
+                            title: 'JIT Compiler',
                             content: `
-                                <h3 style="color: var(--primary);">Описание проекта</h3>
-                                <p>Многофункциональный Telegram бот с базой данных MongoDB.</p>
+                                <h3 style="color: var(--primary);">JIT-компилятор для DSL</h3>
+                                <p>Динамическая компиляция предметно-ориентированного языка.</p>
                                 <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
                                 <ul style="margin-left: 20px;">
-                                    <li>Python + Aiogram 3.x</li>
-                                    <li>MongoDB Atlas</li>
-                                    <li>Docker контейнеризация</li>
+                                    <li>C++20</li>
+                                    <li>LLVM 15</li>
+                                    <li>X86-64 Assembly</li>
+                                    <li>AST оптимизации</li>
+                                    <li>JIT execution engine</li>
                                 </ul>
+                                <p style="margin-top: 20px; color: var(--success);">⚡ 2x speedup over interpreter</p>
                             `
                         },
-                        'auth-system': {
-                            title: 'Auth System',
+                        'ml-platform': {
+                            title: 'ML Inference Engine',
                             content: `
-                                <h3 style="color: var(--primary);">Описание проекта</h3>
-                                <p>Система аутентификации с JWT токенами и refresh механизмом.</p>
+                                <h3 style="color: var(--primary);">Оптимизированный ML инференс</h3>
+                                <p>Высокопроизводительный движок для инференса нейросетей.</p>
                                 <h3 style="color: var(--primary); margin-top: 20px;">Технологии</h3>
                                 <ul style="margin-left: 20px;">
-                                    <li>FastAPI</li>
-                                    <li>PostgreSQL + SQLAlchemy</li>
-                                    <li>JWT с RSA подписью</li>
-                                    <li>Docker + Docker Compose</li>
+                                    <li>Python + CUDA C++</li>
+                                    <li>TensorRT оптимизации</li>
+                                    <li>INT8 quantization</li>
+                                    <li>TensorRT</li>
+                                    <li>ONNX Runtime</li>
                                 </ul>
+                                <p style="margin-top: 20px; color: var(--success);">⚡ 3ms latency @ batch 32</p>
                             `
                         }
                     };
                     
-                    const project = projects[projectId] || projects['api-gateway'];
+                    const project = projects[projectId] || projects['distributed-db'];
                     title.textContent = project.title;
                     content.innerHTML = project.content;
                     
@@ -2174,13 +2445,65 @@
                     document.getElementById('projectModalOverlay').classList.remove('active');
                 },
                 
-                downloadCV() {
+                generateRandomId() {
+                    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                    let result = '';
+                    for (let i = 0; i < 16; i++) {
+                        result += chars.charAt(Math.floor(Math.random() * chars.length));
+                    }
+                    return result;
+                },
+                
+                downloadCV(format = 'pdf') {
+                    const randomId = this.generateRandomId();
+                    const date = new Date().toLocaleDateString('ru-RU').replace(/\./g, '-');
+                    
+                    if (format === 'pdf') {
+                        try {
+                            const { jsPDF } = window.jspdf;
+                            const doc = new jsPDF();
+                            
+                            doc.setFont('courier');
+                            doc.setFontSize(20);
+                            doc.text('АКТИВНЫЙ РАЗРАБОТЧИК', 20, 20);
+                            
+                            doc.setFontSize(12);
+                            doc.text(`ID: ${randomId}`, 20, 40);
+                            doc.text(`Дата: ${date}`, 20, 50);
+                            doc.text(`Версия: v4.0.${Math.floor(Math.random() * 100)}`, 20, 60);
+                            
+                            doc.text('СТЕК ТЕХНОЛОГИЙ:', 20, 80);
+                            doc.text('• 50+ языков программирования', 25, 95);
+                            doc.text('• Rust, C++, Go, Python, TypeScript', 25, 105);
+                            doc.text('• Распределённые системы', 25, 115);
+                            doc.text('• High-load архитектуры', 25, 125);
+                            doc.text('• ML/AI оптимизация', 25, 135);
+                            
+                            doc.text(`Хеш: ${this.generateRandomId().toLowerCase()}`, 20, 160);
+                            
+                            doc.save(`Active_Developer_${randomId}.pdf`);
+                            Notifications.show(`PDF сгенерирован: ${randomId}`, 'success');
+                        } catch (e) {
+                            this.downloadRandomResume();
+                        }
+                    } else {
+                        this.downloadRandomResume();
+                    }
+                },
+                
+                downloadRandomResume() {
+                    const randomId = this.generateRandomId();
+                    const randomHex = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0').toUpperCase();
+                    const randomHash = Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+                    const randomCommit = Math.floor(Math.random() * 10000);
+                    const randomStars = Math.floor(Math.random() * 500) + 100;
+                    
                     const content = `
                         <!DOCTYPE html>
                         <html>
                         <head>
                             <meta charset="UTF-8">
-                            <title>Резюме - Backend Developer</title>
+                            <title>Резюме - Активный разработчик ${randomId}</title>
                             <style>
                                 * { margin: 0; padding: 0; box-sizing: border-box; }
                                 body {
@@ -2191,12 +2514,24 @@
                                     line-height: 1.6;
                                 }
                                 .container { max-width: 800px; margin: 0 auto; }
+                                .header { 
+                                    border-bottom: 2px solid #00b8ff;
+                                    padding-bottom: 20px;
+                                    margin-bottom: 30px;
+                                }
                                 h1 {
                                     font-size: 48px;
                                     margin-bottom: 10px;
                                     background: linear-gradient(135deg, #00ff9d, #00b8ff);
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
+                                }
+                                .id-badge {
+                                    background: rgba(0, 255, 157, 0.1);
+                                    padding: 10px;
+                                    border: 1px solid #00ff9d;
+                                    border-radius: 5px;
+                                    margin: 20px 0;
                                 }
                                 .section {
                                     margin: 30px 0;
@@ -2213,44 +2548,90 @@
                                     border-radius: 20px;
                                     margin: 5px;
                                 }
+                                .random-data {
+                                    color: #888;
+                                    font-size: 12px;
+                                    margin-top: 40px;
+                                    border-top: 1px dashed #00ff9d;
+                                    padding-top: 20px;
+                                }
                             </style>
                         </head>
                         <body>
                             <div class="container">
-                                <h1>Backend Developer</h1>
-                                <h2 style="color: #fff;">16 лет • API Architect</h2>
+                                <div class="header">
+                                    <h1>АКТИВНЫЙ РАЗРАБОТЧИК</h1>
+                                    <h2 style="color: #fff;">⚡ Full Stack • 50+ языков ⚡</h2>
+                                </div>
+                                
+                                <div class="id-badge">
+                                    🔐 ID: DEV-${randomId}<br>
+                                    📅 Дата: ${new Date().toLocaleDateString('ru-RU')}<br>
+                                    🎲 Сид: 0x${randomHex}<br>
+                                    🔢 Версия: v4.0.${randomCommit}
+                                </div>
                                 
                                 <div class="section">
-                                    <div class="section-title">📊 Контакты</div>
+                                    <div class="section-title">📊 КОНТАКТЫ</div>
                                     <div>Telegram: @Sexy_Killed</div>
                                     <div>GitHub: killedofficialbd-sys</div>
+                                    <div>Email: dev.${randomId.substring(0, 8)}@active.engineer</div>
                                     <div>WhatsApp: +7 (906) 448-28-98</div>
                                 </div>
                                 
                                 <div class="section">
-                                    <div class="section-title">💻 Backend стек</div>
+                                    <div class="section-title">💻 ТЕХНОЛОГИЧЕСКИЙ СТЕК</div>
                                     <div>
-                                        <span class="skill-tag">Node.js</span>
+                                        <span class="skill-tag">Rust</span>
+                                        <span class="skill-tag">C++</span>
+                                        <span class="skill-tag">Go</span>
                                         <span class="skill-tag">Python</span>
-                                        <span class="skill-tag">Express</span>
-                                        <span class="skill-tag">FastAPI</span>
-                                        <span class="skill-tag">MongoDB</span>
-                                        <span class="skill-tag">PostgreSQL</span>
-                                        <span class="skill-tag">Redis</span>
-                                        <span class="skill-tag">Docker</span>
+                                        <span class="skill-tag">TypeScript</span>
+                                        <span class="skill-tag">Java</span>
+                                        <span class="skill-tag">Kotlin</span>
+                                        <span class="skill-tag">Swift</span>
+                                        <span class="skill-tag">C#</span>
+                                        <span class="skill-tag">Zig</span>
+                                        <span class="skill-tag">Nim</span>
+                                        <span class="skill-tag">Scala</span>
+                                        <span class="skill-tag">Ruby</span>
+                                        <span class="skill-tag">PHP</span>
+                                        <span class="skill-tag">Dart</span>
+                                        <span class="skill-tag">Julia</span>
                                     </div>
                                 </div>
                                 
                                 <div class="section">
-                                    <div class="section-title">🚀 Проекты</div>
+                                    <div class="section-title">🚀 КЛЮЧЕВЫЕ ПРОЕКТЫ</div>
                                     <div style="margin-bottom: 15px;">
-                                        <h3 style="color: #00ff9d;">API Gateway</h3>
-                                        <p>Микросервисная архитектура с балансировкой нагрузки</p>
+                                        <h3 style="color: #00ff9d;">Distributed KV Store</h3>
+                                        <p>Распределённое хранилище с RAFT | ⭐ ${randomStars}</p>
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <h3 style="color: #00ff9d;">JIT Compiler</h3>
+                                        <p>LLVM-based компилятор | ⚡ ${randomStars - 50}+ ops/sec</p>
                                     </div>
                                     <div>
-                                        <h3 style="color: #00ff9d;">Telegram Bot API</h3>
-                                        <p>Многофункциональный бот с MongoDB</p>
+                                        <h3 style="color: #00ff9d;">ML Inference Engine</h3>
+                                        <p>TensorRT оптимизации | 📈 ${randomCommit % 100}+ моделей</p>
                                     </div>
+                                </div>
+                                
+                                <div class="section">
+                                    <div class="section-title">📈 СТАТИСТИКА</div>
+                                    <div>Коммитов: ${randomCommit * 100}</div>
+                                    <div>Звёзд на GitHub: ${randomStars + 200}</div>
+                                    <div>Часов кодинга: 8760+</div>
+                                    <div>Проектов: 50+</div>
+                                    <div>Аптайм: 100%</div>
+                                </div>
+                                
+                                <div class="random-data">
+                                    🔐 PGP: ${randomHash.substring(0, 40)}<br>
+                                    📦 IPFS: ${randomHash.substring(0, 46)}<br>
+                                    🔗 Block: ${randomHash.substring(0, 64)}<br>
+                                    <br>
+                                    * Это автоматически сгенерированное резюме. Уникальный ID: ${randomId}
                                 </div>
                             </div>
                         </body>
@@ -2261,11 +2642,15 @@
                     const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = 'Backend_Developer_Resume.html';
+                    link.download = `Active_Developer_${randomId}.html`;
                     link.click();
                     URL.revokeObjectURL(url);
                     
-                    Notifications.show('Резюме скачивается...', 'success');
+                    Notifications.show(`Резюме сгенерировано: ${randomId}`, 'success');
+                },
+                
+                startMatrixEffect() {
+                    Notifications.show('💚 Matrix effect activated!', 'info');
                 }
             };
             
